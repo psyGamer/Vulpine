@@ -1,51 +1,48 @@
 project "Engine"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
+	kind		  "StaticLib"
 	staticruntime "on"
 	
-	fastuptodate "false"
+	language   "C++"
+	cppdialect "C++17"	
 	
 	targetdir("../Bin/" .. outputdir .. "/%{prj.name}")
-	objdir("../Bin_int/" .. outputdir .. "/%{prj.name}")
+	objdir("../Bin/temp/" .. outputdir .. "/%{prj.name}")
 		
-	includedirs {
-		os.getenv("VULKAN_SDK").."/Include",
-		os.getenv("GLFW").."/include",
-		
-		"C:/Programs/glm",
+	includedirs 
+	{
+		"$(VULKAN_SDK)/Include",
+		"vendor/glfw/include",
+		"vendor/glm",
 		
 		"src",
 		"vendor"
 	}
 	
-	libdirs {
-		os.getenv("VULKAN_SDK").."/Lib",
-		os.getenv("GLFW").."/lib-vc2019"
-	}
-	
-	links {
+	libdirs "$(VULKAN_SDK)/Lib"
+
+	links 
+	{
 		"vulkan-1",
-		"glfw3_mt"
+		"GLFW"
 	}
 		
-	files {
+	files 
+	{
 		"src/**.cpp",
 		"src/**.tpp",
 		"src/**.hpp",
-		"src/**.h"
+		"src/**.h",
+		
+		"vendor/glm/**.hpp",
+		"vendor/glm/**.inl",
 	}
 	
-	prebuildcommands {
-		"call compile_shaders.bat"
-	}
-	
-	filter { "configurations:Debug" }
+	filter "configurations:Debug"
 		buildoptions "/MTd"
 		runtime "Debug"
 		symbols "on"
 		
-	filter { "configurations:Release" }
+	filter "configurations:Release"
 		buildoptions "/MT"
 		runtime "Release"
 		optimize "on"

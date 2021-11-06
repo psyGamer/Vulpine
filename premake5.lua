@@ -10,6 +10,10 @@ workspace "Vulpine"
 	
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+group "Dependencies"
+	include "Engine/vendor/GLFW"
+group ""
+
 include "Engine"
 
 newaction {
@@ -38,14 +42,5 @@ newaction {
 		os.remove("**.vcxproj.user")
 		
 		print("Done.")
-	end
-}
-
-newaction {
-	trigger = "debug",
-	description = "Remove all binaries and generated files",
-	
-	execute = function()
-		print(os.getenv("GLM"))
 	end
 }

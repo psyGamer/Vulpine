@@ -1,6 +1,6 @@
 # Compiled Executables
 Bin
-Bin_int
+Bin/temp
 
 # Compiled Shaders
 *.spv
