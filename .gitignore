@@ -1,0 +1,19 @@
+# Compiled Executables
+Bin
+Bin_int
+
+# Compiled Shaders
+*.spv
+
+# Visual Studio
+.vs
+**/*.sln
+**/*.vcxproj
+**/*.vcxproj.filters
+**/*.vcxproj.user
+
+# Copyright...
+**/assets/textures
+**/assets/models
+
+
