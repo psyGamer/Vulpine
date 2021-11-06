@@ -13,6 +13,7 @@ project "Engine"
 		"$(VULKAN_SDK)/Include",
 		"vendor/glfw/include",
 		"vendor/glm",
+		"vendor/spdlog/include"
 		
 		"src",
 		"vendor"
