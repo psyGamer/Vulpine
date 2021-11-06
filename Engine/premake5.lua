@@ -13,9 +13,9 @@ project "Engine"
 		"$(VULKAN_SDK)/Include",
 		"vendor/glfw/include",
 		"vendor/glm",
-		"vendor/spdlog/include"
+		"vendor/spdlog/include",
 		
-		"src",
+		"src/Vulpine",
 		"vendor"
 	}
 	
