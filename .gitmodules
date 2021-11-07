@@ -1,9 +1,0 @@
-[submodule "Vulpine/vendor/glm"]
-	path = Vulpine/vendor/glm
-	url = https://github.com/g-truc/glm
-[submodule "Vulpine/vendor/glfw"]
-	path = Vulpine/vendor/glfw
-	url = https://github.com/TheCherno/glfw
-[submodule "Vulpine/vendor/spdlog"]
-	path = Vulpine/vendor/spdlog
-	url = https://github.com/gabime/spdlog
