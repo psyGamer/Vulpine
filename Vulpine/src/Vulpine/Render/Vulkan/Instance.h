@@ -21,6 +21,8 @@ namespace Vulpine::Vulkan
 			if (s_Instance)
 				s_Instance->Destory();
 		}
+
+		const Reference<const Device> GetDevice() const { return m_Device; }
 		
 	private:
 		Instance();
@@ -29,6 +31,8 @@ namespace Vulpine::Vulkan
 
 	private:
 		static Reference<const Instance> s_Instance;
+
+		const Reference<const Device> m_Device;
 
 		const Reference<VkInstance> m_Instance;
 	};
