@@ -1,10 +1,13 @@
-project "Engine"
+project "Vulpine"
 	kind		  "StaticLib"
 	staticruntime "on"
 	
 	language   "C++"
 	cppdialect "C++17"	
 	
+	pchheader "vppch.h"
+	pchsource "src/vppch.cpp"
+
 	targetdir("../Bin/" .. outputdir .. "/%{prj.name}")
 	objdir("../Bin/temp/" .. outputdir .. "/%{prj.name}")
 		
@@ -15,6 +18,7 @@ project "Engine"
 		"vendor/glm",
 		"vendor/spdlog/include",
 		
+		"src",
 		"src/Vulpine",
 		"vendor"
 	}

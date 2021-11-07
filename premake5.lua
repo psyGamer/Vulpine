@@ -6,15 +6,15 @@ workspace "Vulpine"
 		"Release"
 	}
 	
-	startproject "Engine"
+	startproject "Vulpine"
 	
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
-	include "Engine/vendor/GLFW"
+	include "Vulpine/vendor/GLFW"
 group ""
 
-include "Engine"
+include "Vulpine"
 
 newaction {
 	trigger = "clean",
