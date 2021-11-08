@@ -10,7 +10,10 @@ namespace Vulpine
 		static void Create(const std::string& windowTitle, uint32_t width, uint32_t height);
 		static void Destroy();
 
+		static void SetWindowTitle(const std::string& windowTitle);
+
 		GLFWwindow* const GetWindow() { return s_Window; }
+		const std::string& const GetWindowTitle() { return s_WindowTitle; }
 
 		uint32_t GetWidth() { return s_Width; }
 		uint32_t GetHeight() { return s_Height; }
@@ -20,6 +23,7 @@ namespace Vulpine
 
 	private:
 		static GLFWwindow* s_Window;
+		static std::string s_WindowTitle;
 
 		static uint32_t s_Width, s_Height;
 	};
