@@ -21,7 +21,12 @@ namespace Vulpine::Vulkan
 
 	void Swapchain::Destroy()
 	{
-		
+		for (const auto& imageView : s_ImageViews)
+		{
+			vkDestroyImageView(Device::GetLogicalDevice(), imageView, nullptr);
+		}
+
+		vkDestroySwapchainKHR(Device::GetLogicalDevice(), s_Swapchain, nullptr);
 	}
 
 	void Swapchain::SetupSwapchain()
@@ -58,7 +63,7 @@ namespace Vulpine::Vulkan
 		{
 			for (const auto& supportedSurfaceFormat : supportInfo.supportedSurfaceFormats)
 			{
-				if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)
+				if (supportedSurfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)
 					surfaceFormat = supportedSurfaceFormat; // Optimal surface format
 			}
 
@@ -71,7 +76,7 @@ namespace Vulpine::Vulkan
 		{
 			for (const auto& supportedPresentMode : supportInfo.supportedPresentModes)
 			{
-				if (presentMode == VK_PRESENT_MODE_MAILBOX_KHR)
+				if (supportedPresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
 					presentMode = supportedPresentMode; // Optimal present mode
 			}
 
@@ -126,6 +131,43 @@ namespace Vulpine::Vulkan
 
 		s_FramebufferSize = framebufferSize;
 		s_ImageFormat = surfaceFormat.format;
+
+		SetupImageViews();
+	}
+
+	void Swapchain::SetupImageViews()
+	{
+		uint32_t imageViewCount;
+		vkGetSwapchainImagesKHR(Device::GetLogicalDevice(), s_Swapchain, &imageViewCount, nullptr);
+
+		if (imageViewCount != 0)
+		{
+			s_Images.resize(imageViewCount);
+			vkGetSwapchainImagesKHR(Device::GetLogicalDevice(), s_Swapchain, &imageViewCount, s_Images.data());
+		}
+
+		for (int i = 0; i < imageViewCount; i++)
+		{
+			VkImageViewCreateInfo imageViewCreateInfo{};
+			imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+			imageViewCreateInfo.image = s_Images[i];
+
+			imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+			imageViewCreateInfo.format = s_ImageFormat;
+
+			imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+			imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+			imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+			imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+			imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+			imageViewCreateInfo.subresourceRange.levelCount = 1;
+			imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+			imageViewCreateInfo.subresourceRange.layerCount = 1;
+
+			VP_ASSERT_VK(vkCreateImageView(Device::GetLogicalDevice(), &imageViewCreateInfo, nullptr, &s_ImageViews[i]), "Failed to create image views!");
+		}
 	}
 
 	Swapchain::SwapchainSupportInfo Swapchain::QuerySwapchainSupportInfo()
