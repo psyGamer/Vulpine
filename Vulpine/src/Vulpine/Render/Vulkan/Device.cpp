@@ -3,11 +3,13 @@
 
 #include <map>
 
+#include "Core/Window.h"
+
 namespace Vulpine::Vulkan
 {
-	void Device::Create(const VkInstance& instance, const VkSurfaceKHR& surface)
+	void Device::Create(const VkInstance& instance)
 	{
-		const PhysicalDeviceInfo physicalDeviceInfo = ChoseOptimalPhysicalDevice(instance, surface);
+		const PhysicalDeviceInfo physicalDeviceInfo = ChoseOptimalPhysicalDevice(instance);
 
 		s_PhysicalDevice = physicalDeviceInfo.PhysicalDevice;
 
@@ -67,7 +69,7 @@ namespace Vulpine::Vulkan
 		vkDestroyDevice(s_LogicalDevice, nullptr);
 	}
 
-	const Device::PhysicalDeviceInfo& Device::ChoseOptimalPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface)
+	const Device::PhysicalDeviceInfo& Device::ChoseOptimalPhysicalDevice(const VkInstance& instance)
 	{
 		std::vector<VkPhysicalDevice> physicalDevices;
 
@@ -90,7 +92,7 @@ namespace Vulpine::Vulkan
 		{
 			PhysicalDeviceInfo physicalDeviceInfo { physicalDevice };
 
-			uint32_t score = RatePhysicalDevice(physicalDeviceInfo, surface);
+			uint32_t score = RatePhysicalDevice(physicalDeviceInfo);
 
 			if (score <= topScore)
 				continue;
@@ -108,7 +110,7 @@ namespace Vulpine::Vulkan
 						physicalDeviceInfo.GraphicsQueueIndex = i;
 
 					VkBool32 presentSupport;
-					vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, surface, &presentSupport);
+					vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, Window::GetSurface(), &presentSupport);
 
 					if (presentSupport)
 						physicalDeviceInfo.PresentQueueIndex = i;
@@ -133,7 +135,7 @@ namespace Vulpine::Vulkan
 		return ratedPhysicalDevices.rbegin()->second;
 	}
 
-	uint32_t Device::RatePhysicalDevice(const Device::PhysicalDeviceInfo& physicalDeviceInfo, const VkSurfaceKHR& surface)
+	uint32_t Device::RatePhysicalDevice(const Device::PhysicalDeviceInfo& physicalDeviceInfo)
 	{
 		VkPhysicalDeviceProperties deviceProperties;
 		vkGetPhysicalDeviceProperties(physicalDeviceInfo.PhysicalDevice, &deviceProperties);

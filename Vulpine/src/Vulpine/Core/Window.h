@@ -1,5 +1,6 @@
 #pragma once
 
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 namespace Vulpine
@@ -10,6 +11,8 @@ namespace Vulpine
 		static void Create(const std::string& windowTitle, uint32_t width, uint32_t height);
 		static void Destroy();
 
+		static void CreateSurface(const VkInstance& instance);
+
 		static void SetWindowTitle(const std::string& windowTitle);
 
 		static GLFWwindow* const GetWindow() { return s_Window; }
@@ -17,6 +20,8 @@ namespace Vulpine
 
 		static uint32_t GetWidth() { return s_Width; }
 		static uint32_t GetHeight() { return s_Height; }
+
+		static VkSurfaceKHR& GetSurface();
 
 	private:
 		static void OnWindowResize(GLFWwindow* window, int width, int height);
@@ -26,6 +31,8 @@ namespace Vulpine
 		static std::string s_WindowTitle;
 
 		static uint32_t s_Width, s_Height;
+
+		static VkSurfaceKHR s_Surface;
 	};
 }
 

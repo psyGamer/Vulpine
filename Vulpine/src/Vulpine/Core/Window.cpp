@@ -22,6 +22,11 @@ namespace Vulpine
 		glfwTerminate();
 	}
 
+	void Window::CreateSurface(const VkInstance& instance)
+	{
+		glfwCreateWindowSurface(instance, s_Window, nullptr, &s_Surface);
+	}
+
 	void Window::SetWindowTitle(const std::string& windowTitle)
 	{
 		glfwSetWindowTitle(s_Window, windowTitle.c_str());
