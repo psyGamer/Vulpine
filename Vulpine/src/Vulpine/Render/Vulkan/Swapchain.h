@@ -38,5 +38,7 @@ namespace Vulpine::Vulkan
 
 		static VkExtent2D s_FramebufferSize;
 		static VkFormat s_ImageFormat;
+
+		friend class RenderPass;
 	};
 }
