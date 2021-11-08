@@ -12,11 +12,11 @@ namespace Vulpine
 
 		static void SetWindowTitle(const std::string& windowTitle);
 
-		GLFWwindow* const GetWindow() { return s_Window; }
-		const std::string& const GetWindowTitle() { return s_WindowTitle; }
+		static GLFWwindow* const GetWindow() { return s_Window; }
+		static const std::string& const GetWindowTitle() { return s_WindowTitle; }
 
-		uint32_t GetWidth() { return s_Width; }
-		uint32_t GetHeight() { return s_Height; }
+		static uint32_t GetWidth() { return s_Width; }
+		static uint32_t GetHeight() { return s_Height; }
 
 	private:
 		static void OnWindowResize(GLFWwindow* window, int width, int height);
