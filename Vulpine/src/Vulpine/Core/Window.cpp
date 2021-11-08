@@ -27,6 +27,17 @@ namespace Vulpine
 		glfwCreateWindowSurface(instance, s_Window, nullptr, &s_Surface);
 	}
 
+	VkExtent2D Window::QueryFramebufferSize()
+	{
+		int width, height;
+		glfwGetFramebufferSize(s_Window, &width, &height);
+
+		return VkExtent2D{ 
+			static_cast<uint32_t>(width), 
+			static_cast<uint32_t>(height)
+		};
+	}
+
 	void Window::SetWindowTitle(const std::string& windowTitle)
 	{
 		glfwSetWindowTitle(s_Window, windowTitle.c_str());

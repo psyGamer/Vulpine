@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable : 26812) // Vulkan issue
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
@@ -12,6 +14,8 @@ namespace Vulpine
 		static void Destroy();
 
 		static void CreateSurface(const VkInstance& instance);
+
+		static VkExtent2D QueryFramebufferSize();
 
 		static void SetWindowTitle(const std::string& windowTitle);
 
