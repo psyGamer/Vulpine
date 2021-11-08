@@ -10,7 +10,7 @@ namespace Vulpine::Vulkan
 		const PhysicalDeviceInfo physicalDeviceInfo = ChoseOptimalPhysicalDevice(instance, surface);
 
 		// Setup queues
-		std::vector<const VkDeviceQueueCreateInfo&> queueInfos;
+		std::vector<VkDeviceQueueCreateInfo> queueInfos;
 		
 		{
 			// Prevent queue duplication when the graphics and present are the same
@@ -146,7 +146,7 @@ namespace Vulpine::Vulkan
 			std::vector<VkExtensionProperties> extentionProperties(extensionPropertyCount);
 			vkEnumerateDeviceExtensionProperties(physicalDeviceInfo.PhysicalDevice, nullptr, &extensionPropertyCount, extentionProperties.data());
 
-			std::unordered_set<const std::string> requiredExtensions = {
+			std::unordered_set<std::string> requiredExtensions = {
 				VK_KHR_SWAPCHAIN_EXTENSION_NAME
 			};
 

@@ -9,28 +9,28 @@ namespace Vulpine::Vulkan
 	class Instance
 	{
 	public:
-		static const Reference<const Instance> GetOrCreate()
+		static const Reference<Instance> GetOrCreate()
 		{
 			if (!s_Instance)
-				s_Instance = CreateReference<const Instance>();
+				s_Instance = CreateReference<Instance>();
 
 			return s_Instance;
 		}
 		static void Destory()
 		{
 			if (s_Instance)
-				s_Instance->Destory();
+				s_Instance->DestoryInstance();
 		}
 
-		const Reference<const Device> GetDevice() const { return m_Device; }
-		
-	private:
 		Instance();
-		
-		void Destory();
+
+		const Reference<const Device> GetDevice() const { return m_Device; }
 
 	private:
-		static Reference<const Instance> s_Instance;
+		void DestoryInstance();
+
+	private:
+		static Reference<Instance> s_Instance;
 
 		const Reference<const Device> m_Device;
 

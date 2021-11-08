@@ -38,6 +38,11 @@ namespace Vulpine::Vulkan
 		instanceInfo.enabledExtensionCount = glfwExtensionCount;
 		instanceInfo.ppEnabledExtensionNames = glfwExtensions;
 
-		VP_ASSERT_VK(vkCreateInstance(&instanceInfo, nullptr, m_pInstance.get()), "Failed to create instance");
+		VP_ASSERT_VK(vkCreateInstance(&instanceInfo, nullptr, m_Instance.get()), "Failed to create instance");
+	}
+
+	void Instance::DestoryInstance()
+	{
+		vkDestroyInstance(*m_Instance, nullptr);
 	}
 }
