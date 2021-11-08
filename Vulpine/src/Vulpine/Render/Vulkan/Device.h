@@ -14,11 +14,11 @@ namespace Vulpine::Vulkan
 		static void Create(const VkInstance& instance);
 		static void Destory();
 
-		static const VkDevice& GetLogicalDevice();
-		static const VkPhysicalDevice& GetPhysicalDevice();
+		static const VkDevice& GetLogicalDevice() { return s_LogicalDevice; }
+		static const VkPhysicalDevice& GetPhysicalDevice() { return s_PhysicalDevice; }
 
-		static const VkQueue& GetGraphicsQueue();
-		static const VkQueue& GetPresentQueue();
+		static const VkQueue& GetGraphicsQueue() { return s_GraphicsQueue; }
+		static const VkQueue& GetPresentQueue() { return s_PresentQueue; }
 
 	private:
 		struct PhysicalDeviceInfo
