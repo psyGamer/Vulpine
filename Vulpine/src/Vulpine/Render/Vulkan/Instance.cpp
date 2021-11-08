@@ -1,9 +1,11 @@
 #include "vppch.h"
 #include "Instance.h"
 
+#include "Device.h"
+
 namespace Vulpine::Vulkan
 {
-	Instance::Instance()
+	void Instance::Create()
 	{
 		// Application Info
 	
@@ -38,11 +40,14 @@ namespace Vulpine::Vulkan
 		instanceInfo.enabledExtensionCount = glfwExtensionCount;
 		instanceInfo.ppEnabledExtensionNames = glfwExtensions;
 
-		VP_ASSERT_VK(vkCreateInstance(&instanceInfo, nullptr, m_Instance.get()), "Failed to create instance");
+		VP_ASSERT_VK(vkCreateInstance(&instanceInfo, nullptr, &s_Instance), "Failed to create instance");
+
+
+		Device::Create(s_Instance, nullptr); // TODO Get surface from GLFW
 	}
 
-	void Instance::DestoryInstance()
+	void Instance::Destory()
 	{
-		vkDestroyInstance(*m_Instance, nullptr);
+		vkDestroyInstance(s_Instance, nullptr);
 	}
 }

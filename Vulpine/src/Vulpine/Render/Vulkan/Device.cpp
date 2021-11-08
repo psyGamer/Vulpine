@@ -5,9 +5,11 @@
 
 namespace Vulpine::Vulkan
 {
-	Device::Device(const Reference<VkInstance> instance, const Reference<VkSurfaceKHR> surface)
+	void Device::Create(const VkInstance& instance, const Reference<VkSurfaceKHR> surface)
 	{
 		const PhysicalDeviceInfo physicalDeviceInfo = ChoseOptimalPhysicalDevice(instance, surface);
+
+		s_PhysicalDevice = physicalDeviceInfo.PhysicalDevice;
 
 		// Setup queues
 		std::vector<VkDeviceQueueCreateInfo> queueInfos;
@@ -54,30 +56,30 @@ namespace Vulpine::Vulkan
 
 		deviceInfo.pEnabledFeatures = &deviceFeatures;
 
-		VP_ASSERT_VK(vkCreateDevice(m_PhysicalDevice, &deviceInfo, nullptr, &m_LogicalDevice), "Failed to create logical device!");
+		VP_ASSERT_VK(vkCreateDevice(s_PhysicalDevice, &deviceInfo, nullptr, &s_LogicalDevice), "Failed to create logical device!");
 
-		vkGetDeviceQueue(m_LogicalDevice, physicalDeviceInfo.GraphicsQueueIndex.value(), 0, &m_GraphicsQueue);
-		vkGetDeviceQueue(m_LogicalDevice, physicalDeviceInfo.PresentQueueIndex.value(), 0, &m_PresentQueue);
+		vkGetDeviceQueue(s_LogicalDevice, physicalDeviceInfo.GraphicsQueueIndex.value(), 0, &s_GraphicsQueue);
+		vkGetDeviceQueue(s_LogicalDevice, physicalDeviceInfo.PresentQueueIndex.value(), 0, &s_PresentQueue);
 	}
 
-	Device::~Device()
+	void Device::Destory()
 	{
-		vkDestroyDevice(m_LogicalDevice, nullptr);
+		vkDestroyDevice(s_LogicalDevice, nullptr);
 	}
 
-	const Device::PhysicalDeviceInfo& Device::ChoseOptimalPhysicalDevice(const Reference<VkInstance> instance, const Reference<VkSurfaceKHR> surface)
+	const Device::PhysicalDeviceInfo& Device::ChoseOptimalPhysicalDevice(const VkInstance& instance, const Reference<VkSurfaceKHR> surface)
 	{
 		std::vector<VkPhysicalDevice> physicalDevices;
 
 		// Get all physical devices
 		{
 			uint32_t physicalDeviceCount;
-			vkEnumeratePhysicalDevices(*instance, &physicalDeviceCount, nullptr);
+			vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
 
 			VP_ASSERT(physicalDeviceCount == 0, "Could not find a GPU which supports Vulkan!");
 
 			physicalDevices.resize(physicalDeviceCount);
-			vkEnumeratePhysicalDevices(*instance, &physicalDeviceCount, physicalDevices.data());
+			vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
 		}
 
 		// Rate the physical devices based on their features and properties

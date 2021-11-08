@@ -11,8 +11,14 @@ namespace Vulpine::Vulkan
 	class Device
 	{
 	public:
-		Device(const Reference<VkInstance> instance, const Reference<VkSurfaceKHR> surface);
-		~Device();
+		static void Create(const VkInstance& instance, const Reference<VkSurfaceKHR> surface);
+		static void Destory();
+
+		static const VkDevice& GetLogicalDevice();
+		static const VkPhysicalDevice& GetPhysicalDevice();
+
+		static const VkQueue& GetGraphicsQueue();
+		static const VkQueue& GetPresentQueue();
 
 	private:
 		struct PhysicalDeviceInfo
@@ -28,15 +34,15 @@ namespace Vulpine::Vulkan
 			}
 		};
 
-		static const PhysicalDeviceInfo& ChoseOptimalPhysicalDevice(const Reference<VkInstance> instance, const Reference<VkSurfaceKHR> surface);
+		static const PhysicalDeviceInfo& ChoseOptimalPhysicalDevice(const VkInstance& instance, const Reference<VkSurfaceKHR> surface);
 		static uint32_t RatePhysicalDevice(const PhysicalDeviceInfo& physicalDeviceInfo, const Reference<VkSurfaceKHR> surface);
 
 	private:
-		VkDevice m_LogicalDevice;
-		VkPhysicalDevice m_PhysicalDevice;
+		static VkDevice s_LogicalDevice;
+		static VkPhysicalDevice s_PhysicalDevice;
 
-		VkQueue m_GraphicsQueue;
-		VkQueue m_PresentQueue;
+		static VkQueue s_GraphicsQueue;
+		static VkQueue s_PresentQueue;
 	};
 }
 
