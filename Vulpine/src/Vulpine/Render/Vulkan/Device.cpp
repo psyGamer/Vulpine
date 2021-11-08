@@ -90,36 +90,12 @@ namespace Vulpine::Vulkan
 
 		for (auto physicalDevice : physicalDevices)
 		{
-			PhysicalDeviceInfo physicalDeviceInfo { physicalDevice };
+			PhysicalDeviceInfo physicalDeviceInfo = QueryPhysicalDeviceInfo(physicalDevice);
 
 			uint32_t score = RatePhysicalDevice(physicalDeviceInfo);
 
 			if (score <= topScore)
 				continue;
-
-			// Find queue indicies
-			{
-				uint32_t queueFamilyCount;
-				vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
-				std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-				vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
-
-				for (int i = 0; i < queueFamilyCount; i++)
-				{
-					if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-						physicalDeviceInfo.GraphicsQueueIndex = i;
-
-					VkBool32 presentSupport;
-					vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, Window::GetSurface(), &presentSupport);
-
-					if (presentSupport)
-						physicalDeviceInfo.PresentQueueIndex = i;
-
-					// All required queue indices have been found
-					if (physicalDeviceInfo.QueueIndicesFound())
-						break;
-				}
-			}
 
 			// Check if This device supports all required queue families
 			if (!physicalDeviceInfo.QueueIndicesFound())
@@ -133,6 +109,34 @@ namespace Vulpine::Vulkan
 		VP_ASSERT(ratedPhysicalDevices.rbegin()->first == 0, "Could not find a GPU which supports Vulkan!");
 
 		return ratedPhysicalDevices.rbegin()->second;
+	}
+
+	Device::PhysicalDeviceInfo Device::QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice)
+	{
+		PhysicalDeviceInfo physicalDeviceInfo = { physicalDevice };
+
+		uint32_t queueFamilyCount;
+		vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
+		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
+
+		for (int i = 0; i < queueFamilyCount; i++)
+		{
+			if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+				physicalDeviceInfo.GraphicsQueueIndex = i;
+
+			VkBool32 presentSupport;
+			vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, Window::GetSurface(), &presentSupport);
+
+			if (presentSupport)
+				physicalDeviceInfo.PresentQueueIndex = i;
+
+			// All required queue indices have been found
+			if (physicalDeviceInfo.QueueIndicesFound())
+				break;
+		}
+
+		return physicalDeviceInfo;
 	}
 
 	uint32_t Device::RatePhysicalDevice(const Device::PhysicalDeviceInfo& physicalDeviceInfo)

@@ -35,6 +35,7 @@ namespace Vulpine::Vulkan
 		};
 
 		static const PhysicalDeviceInfo& ChoseOptimalPhysicalDevice(const VkInstance& instance);
+		static PhysicalDeviceInfo QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice);
 		static uint32_t RatePhysicalDevice(const PhysicalDeviceInfo& physicalDeviceInfo);
 
 	private:
@@ -43,6 +44,8 @@ namespace Vulpine::Vulkan
 
 		static VkQueue s_GraphicsQueue;
 		static VkQueue s_PresentQueue;
+
+		friend class Swapchain;
 	};
 }
 
