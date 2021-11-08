@@ -3,6 +3,7 @@
 
 #include "Core/Window.h"
 #include "Device.h"
+#include "RenderPass.h"
 
 namespace Vulpine::Vulkan
 {
@@ -11,16 +12,26 @@ namespace Vulpine::Vulkan
 		s_Swapchain = VK_NULL_HANDLE;
 
 		SetupSwapchain();
+		SetupImageViews();
+		SetupFramebuffers();
 	}
 
 	void Swapchain::Recreate()
 	{
 		Destroy();
+
 		SetupSwapchain();
+		SetupImageViews();
+		SetupFramebuffers();
 	}
 
 	void Swapchain::Destroy()
 	{
+		for (const auto& framebuffer : s_Framebuffers)
+		{
+			vkDestroyFramebuffer(Device::GetLogicalDevice(), framebuffer, nullptr);
+		}
+
 		for (const auto& imageView : s_ImageViews)
 		{
 			vkDestroyImageView(Device::GetLogicalDevice(), imageView, nullptr);
@@ -131,8 +142,6 @@ namespace Vulpine::Vulkan
 
 		s_FramebufferSize = framebufferSize;
 		s_ImageFormat = surfaceFormat.format;
-
-		SetupImageViews();
 	}
 
 	void Swapchain::SetupImageViews()
@@ -167,6 +176,32 @@ namespace Vulpine::Vulkan
 			imageViewCreateInfo.subresourceRange.layerCount = 1;
 
 			VP_ASSERT_VK(vkCreateImageView(Device::GetLogicalDevice(), &imageViewCreateInfo, nullptr, &s_ImageViews[i]), "Failed to create image views!");
+		}
+	}
+
+	void Swapchain::SetupFramebuffers()
+	{
+		RenderPass::Create();
+		
+		s_Framebuffers.resize(s_ImageViews.size());
+
+		for (size_t i = 0; i < s_Framebuffers.size(); i++)
+		{
+			std::vector<VkImageView> attachments = {
+				s_ImageViews[i]
+			};
+
+			VkFramebufferCreateInfo framebufferInfo{};
+			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+
+			framebufferInfo.renderPass = RenderPass::GetRenderPass();
+			framebufferInfo.attachmentCount = attachments.size();
+			framebufferInfo.pAttachments = attachments.data();
+			framebufferInfo.width = s_FramebufferSize.width;
+			framebufferInfo.height = s_FramebufferSize.height;
+			framebufferInfo.layers = 1;
+
+			VP_ASSERT_VK(vkCreateFramebuffer(Device::GetLogicalDevice(), &framebufferInfo, nullptr, &s_Framebuffers[i]), "Failed to create frame buffers");
 		}
 	}
 
