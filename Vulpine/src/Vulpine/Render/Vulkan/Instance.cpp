@@ -1,18 +1,22 @@
 #include "vppch.h"
 #include "Instance.h"
 
+#include "Core/Window.h"
+
 #include "Device.h"
 
 namespace Vulpine::Vulkan
 {
 	void Instance::Create()
 	{
+		VP_ASSERT(Window::GetWindow != nullptr, "Window not yet initialized");
+
 		// Application Info
 	
 		VkApplicationInfo applicationInfo{};
 		applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		
-		applicationInfo.pApplicationName = "Vulpine Application";
+		applicationInfo.pApplicationName = Window::GetWindowTitle().c_str();
 		applicationInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 		applicationInfo.pEngineName = "Vulpine Engine";
 		applicationInfo.engineVersion = VK_MAKE_VERSION(0, 1, 0);
@@ -42,8 +46,10 @@ namespace Vulpine::Vulkan
 
 		VP_ASSERT_VK(vkCreateInstance(&instanceInfo, nullptr, &s_Instance), "Failed to create instance");
 
+		VkSurfaceKHR surface;
+		glfwCreateWindowSurface(s_Instance, Window::GetWindow(), nullptr, &surface);
 
-		Device::Create(s_Instance, nullptr); // TODO Get surface from GLFW
+		Device::Create(s_Instance, surface);
 	}
 
 	void Instance::Destory()

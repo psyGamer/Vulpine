@@ -11,7 +11,7 @@ namespace Vulpine::Vulkan
 	class Device
 	{
 	public:
-		static void Create(const VkInstance& instance, const Reference<VkSurfaceKHR> surface);
+		static void Create(const VkInstance& instance, const VkSurfaceKHR& surface);
 		static void Destory();
 
 		static const VkDevice& GetLogicalDevice();
@@ -34,8 +34,8 @@ namespace Vulpine::Vulkan
 			}
 		};
 
-		static const PhysicalDeviceInfo& ChoseOptimalPhysicalDevice(const VkInstance& instance, const Reference<VkSurfaceKHR> surface);
-		static uint32_t RatePhysicalDevice(const PhysicalDeviceInfo& physicalDeviceInfo, const Reference<VkSurfaceKHR> surface);
+		static const PhysicalDeviceInfo& ChoseOptimalPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface);
+		static uint32_t RatePhysicalDevice(const PhysicalDeviceInfo& physicalDeviceInfo, const VkSurfaceKHR& surface);
 
 	private:
 		static VkDevice s_LogicalDevice;
