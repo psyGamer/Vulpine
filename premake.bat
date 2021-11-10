@@ -12,6 +12,7 @@ GOTO Done
 echo.
 echo Enter 'premake.bat action' where action is one of the following:
 echo.
+echo  compile           Will generate 
 echo  clean             Remove all binaries and generated files
 echo  codelite          Generate CodeLite project files
 echo  gmake             Generate GNU makefiles for POSIX, MinGW, and Cygwin
@@ -37,7 +38,7 @@ IF NOT DEFINED DevEnvDir (
 	call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"
 )
 
-set solutionFile="Workspace.sln"
+set solutionFile="Vulpine.sln"
 
 msbuild /t:Build /p:Configuration=Debug /p:Platform=x64 %solutionFile%
 
