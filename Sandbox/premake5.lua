@@ -1,6 +1,6 @@
 project "Sandbox"
 	kind		  "ConsoleApp"
-	staticruntime "on"
+	staticruntime "off"
 	
 	language   "C++"
 	cppdialect "C++17"	
@@ -8,20 +8,36 @@ project "Sandbox"
 	targetdir("%{wks.location}/Bin/" .. outputdir .. "/%{prj.name}")
 	objdir("%{wks.location}/Bin/temp/" .. outputdir .. "/%{prj.name}")
 		
+	dependson "Vulpine"
+		
 	includedirs 
 	{	
 		"%{wks.location}/Vulpine/src",
 		
 		"%{wks.location}/Vulpine/vendor",
 		"%{wks.location}/Vulpine/vendor/glm",
-		"%{wks.location}/Vulpine/vendor/spdlog/include"
+		"%{wks.location}/Vulpine/vendor/spdlog/include",
+
+		"%{wks.location}/Vulpine/vendor/glfw/include", -- Temporary
+		"$(VULKAN_SDK)/Include" -- Temporary
 	}
 
-	links 
+	libdirs 
 	{
-		"Vulpine"
+		"$(VULKAN_SDK)/Lib",
+
+		"%{wks.location}/Bin/" .. outputdir .. "/Vulpine",
+		"%{wks.location}/Vulpine/vendor/GLFW/Bin/" .. outputdir .. "/GLFW",
 	}
-		
+
+	links
+	{
+		"vulkan-1.lib",
+		"glfw.lib",
+
+		"Vulpine.lib"
+	}
+
 	files 
 	{
 		"src/**.cpp",
@@ -29,11 +45,9 @@ project "Sandbox"
 	}
 	
 	filter "configurations:Debug"
-		buildoptions "/MTd"
 		runtime "Debug"
 		symbols "on"
 		
 	filter "configurations:Release"
-		buildoptions "/MT"
 		runtime "Release"
 		optimize "on"

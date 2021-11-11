@@ -1,6 +1,6 @@
 project "Vulpine"
 	kind		  "StaticLib"
-	staticruntime "on"
+	staticruntime "off"
 	
 	language   "C++"
 	cppdialect "C++17"	
@@ -10,6 +10,8 @@ project "Vulpine"
 
 	targetdir("../Bin/" .. outputdir .. "/%{prj.name}")
 	objdir("../Bin/temp/" .. outputdir .. "/%{prj.name}")
+		
+	dependson "GLFW"
 		
 	includedirs 
 	{
@@ -43,12 +45,10 @@ project "Vulpine"
 	}
 	
 	filter "configurations:Debug"
-		buildoptions "/MTd"
 		runtime "Debug"
 		symbols "on"
 		
 	filter "configurations:Release"
-		buildoptions "/MT"
 		runtime "Release"
 		optimize "on"
 	
