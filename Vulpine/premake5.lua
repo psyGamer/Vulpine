@@ -45,10 +45,17 @@ project "Vulpine"
 	}
 	
 	filter "configurations:Debug"
+		defines "VP_DEBUG"
 		runtime "Debug"
 		symbols "on"
-		
+
 	filter "configurations:Release"
+		defines "VP_RELEASE"
+		runtime "Release"
+		optimize "on"
+		
+	filter "configurations:Dist"
+		defines "VP_DIST"
 		runtime "Release"
 		optimize "on"
 	

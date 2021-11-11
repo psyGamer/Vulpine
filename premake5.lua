@@ -3,7 +3,8 @@ workspace "Vulpine"
 	
 	configurations {
 		"Debug",
-		"Release"
+		"Release",
+		"Dist"
 	}
 	
 	startproject "Sandbox"
