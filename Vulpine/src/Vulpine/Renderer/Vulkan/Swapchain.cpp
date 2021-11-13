@@ -41,6 +41,8 @@ namespace Vulpine::Vulkan
 			vkDestroyFramebuffer(Device::GetLogicalDevice(), framebuffer, nullptr);
 		}
 
+		RenderPass::Destroy();
+
 		for (const auto& imageView : s_ImageViews)
 		{
 			vkDestroyImageView(Device::GetLogicalDevice(), imageView, nullptr);
@@ -83,7 +85,7 @@ namespace Vulpine::Vulkan
 		{
 			for (const auto& supportedSurfaceFormat : supportInfo.supportedSurfaceFormats)
 			{
-				if (supportedSurfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)
+				if (supportedSurfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && supportedSurfaceFormat.colorSpace == VK_COLORSPACE_SRGB_NONLINEAR_KHR)
 					surfaceFormat = supportedSurfaceFormat; // Optimal surface format
 			}
 
@@ -119,8 +121,7 @@ namespace Vulpine::Vulkan
 		swapchainInfo.imageArrayLayers = 1;
 		swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-		// Select correct iamge sharing mode
-
+		// Select correct image sharing mode
 		if (queueIndices.GraphicsQueueIndex.value() != queueIndices.PresentQueueIndex.value())
 		{
 			uint32_t queueFamilyIndices[] = {
@@ -158,11 +159,11 @@ namespace Vulpine::Vulkan
 		uint32_t imageViewCount;
 		vkGetSwapchainImagesKHR(Device::GetLogicalDevice(), s_Swapchain, &imageViewCount, nullptr);
 
-		if (imageViewCount != 0)
-		{
-			s_Images.resize(imageViewCount);
-			vkGetSwapchainImagesKHR(Device::GetLogicalDevice(), s_Swapchain, &imageViewCount, s_Images.data());
-		}
+		VP_ASSERT(imageViewCount == 0, "Failed to create iamge views!");
+
+		s_Images.resize(imageViewCount);
+		s_ImageViews.resize(imageViewCount);
+		vkGetSwapchainImagesKHR(Device::GetLogicalDevice(), s_Swapchain, &imageViewCount, s_Images.data());
 
 		for (int i = 0; i < imageViewCount; i++)
 		{
