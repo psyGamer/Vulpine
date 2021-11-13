@@ -3,10 +3,11 @@ workspace "Vulpine"
 	
 	configurations {
 		"Debug",
-		"Release"
+		"Release",
+		"Dist"
 	}
 	
-	startproject "Vulpine"
+	startproject "Sandbox"
 	
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -15,6 +16,7 @@ group "Dependencies"
 group ""
 
 include "Vulpine"
+include "Sandbox"
 
 newaction {
 	trigger = "clean",
