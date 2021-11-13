@@ -25,7 +25,7 @@ namespace Vulpine
 		static uint32_t GetWidth() { return s_Width; }
 		static uint32_t GetHeight() { return s_Height; }
 
-		static VkSurfaceKHR& GetSurface();
+		static VkSurfaceKHR& GetSurface() { return s_Surface; }
 
 	private:
 		static void OnWindowResize(GLFWwindow* window, int width, int height);
