@@ -3,6 +3,13 @@
 
 namespace Vulpine
 {
+	GLFWwindow* Window::s_Window = nullptr;
+	std::string Window::s_WindowTitle = "";
+
+	uint32_t Window::s_Width = 0, Window::s_Height = 0;
+
+	VkSurfaceKHR Window::s_Surface = VK_NULL_HANDLE;
+	
 	void Window::Create(const std::string& windowTitle, uint32_t width, uint32_t height)
 	{
 		glfwInit();

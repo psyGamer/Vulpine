@@ -6,6 +6,8 @@
 
 namespace Vulpine::Vulkan
 {
+	VkRenderPass RenderPass::s_RenderPass = VK_NULL_HANDLE;
+
 	void RenderPass::Create()
 	{
 		VkAttachmentDescription colorAttachment{};

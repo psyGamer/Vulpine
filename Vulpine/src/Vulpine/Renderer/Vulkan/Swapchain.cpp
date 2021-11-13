@@ -7,6 +7,15 @@
 
 namespace Vulpine::Vulkan
 {
+	VkSwapchainKHR Swapchain::s_Swapchain = VK_NULL_HANDLE;
+
+	std::vector<VkImage> Swapchain::s_Images;
+	std::vector<VkImageView> Swapchain::s_ImageViews;
+	std::vector<VkFramebuffer> Swapchain::s_Framebuffers;
+
+	VkExtent2D Swapchain::s_FramebufferSize = {};
+	VkFormat Swapchain::s_ImageFormat = {};
+
 	void Swapchain::Create()
 	{
 		s_Swapchain = VK_NULL_HANDLE;

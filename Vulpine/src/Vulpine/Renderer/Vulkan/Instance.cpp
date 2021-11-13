@@ -7,6 +7,8 @@
 
 namespace Vulpine::Vulkan
 {
+	VkInstance Instance::s_Instance = VK_NULL_HANDLE;
+
 	void Instance::Create()
 	{
 		VP_ASSERT(Window::GetWindow != nullptr, "Window not yet initialized");

@@ -7,6 +7,14 @@
 
 namespace Vulpine::Vulkan
 {
+	Device::PhysicalDeviceInfo Device::s_PhysicalDeviceInfo = {};
+
+	VkDevice Device::s_LogicalDevice = VK_NULL_HANDLE;
+	VkPhysicalDevice Device::s_PhysicalDevice = VK_NULL_HANDLE;
+
+	VkQueue Device::s_GraphicsQueue = VK_NULL_HANDLE;
+	VkQueue Device::s_PresentQueue = VK_NULL_HANDLE;
+
 	void Device::Create(const VkInstance& instance)
 	{
 		const PhysicalDeviceInfo physicalDeviceInfo = ChoseOptimalPhysicalDevice(instance);
