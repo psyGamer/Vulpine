@@ -25,7 +25,7 @@ namespace Vulpine::Vulkan
 		VkVertexInputBindingDescription bindingDescription;
 		bindingDescription.binding = m_BindingIndex;
 		bindingDescription.stride = stride;
-		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
 		return bindingDescription;
 	}
