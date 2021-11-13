@@ -17,9 +17,8 @@ namespace Vulpine::Vulkan
 
 	void Device::Create(const VkInstance& instance)
 	{
-		const PhysicalDeviceInfo physicalDeviceInfo = ChoseOptimalPhysicalDevice(instance);
-
-		s_PhysicalDevice = physicalDeviceInfo.PhysicalDevice;
+		s_PhysicalDeviceInfo = ChoseOptimalPhysicalDevice(instance);
+		s_PhysicalDevice = s_PhysicalDeviceInfo.PhysicalDevice;
 
 		// Setup queues
 		std::vector<VkDeviceQueueCreateInfo> queueInfos;
@@ -27,8 +26,8 @@ namespace Vulpine::Vulkan
 		{
 			// Prevent queue duplication when the graphics and present are the same
 			const std::unordered_set<uint32_t> uniqueQueueIndices = {
-				physicalDeviceInfo.GraphicsQueueIndex.value(),
-				physicalDeviceInfo.PresentQueueIndex.value()
+				s_PhysicalDeviceInfo.GraphicsQueueIndex.value(),
+				s_PhysicalDeviceInfo.PresentQueueIndex.value()
 			};
 
 			for (const uint32_t queueIndex : uniqueQueueIndices)
@@ -68,8 +67,8 @@ namespace Vulpine::Vulkan
 
 		VP_ASSERT_VK(vkCreateDevice(s_PhysicalDevice, &deviceInfo, nullptr, &s_LogicalDevice), "Failed to create logical device!");
 
-		vkGetDeviceQueue(s_LogicalDevice, physicalDeviceInfo.GraphicsQueueIndex.value(), 0, &s_GraphicsQueue);
-		vkGetDeviceQueue(s_LogicalDevice, physicalDeviceInfo.PresentQueueIndex.value(), 0, &s_PresentQueue);
+		vkGetDeviceQueue(s_LogicalDevice, s_PhysicalDeviceInfo.GraphicsQueueIndex.value(), 0, &s_GraphicsQueue);
+		vkGetDeviceQueue(s_LogicalDevice, s_PhysicalDeviceInfo.PresentQueueIndex.value(), 0, &s_PresentQueue);
 	}
 
 	void Device::Destory()
@@ -77,7 +76,7 @@ namespace Vulpine::Vulkan
 		vkDestroyDevice(s_LogicalDevice, nullptr);
 	}
 
-	const Device::PhysicalDeviceInfo& Device::ChoseOptimalPhysicalDevice(const VkInstance& instance)
+	Device::PhysicalDeviceInfo Device::ChoseOptimalPhysicalDevice(const VkInstance& instance)
 	{
 		std::vector<VkPhysicalDevice> physicalDevices;
 
