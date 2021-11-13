@@ -5,7 +5,7 @@ namespace Vulpine
 	class FileUtil
 	{
 	public:
-		static std::vector<char>& ReadFile(const std::string& filePath);
+		static void ReadFile(const std::string& filePath, std::vector<char>& fileBuffer);
 	};
 }
 
