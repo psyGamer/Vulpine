@@ -164,4 +164,31 @@ namespace Vulpine::Vulkan
 		vkDestroyPipeline(Device::GetLogicalDevice(), m_Pipeline, nullptr);
 		vkDestroyPipelineLayout(Device::GetLogicalDevice(), m_PipelineLayout, nullptr);
 	}
+
+	void Pipeline::ResetViewport()
+	{
+		SetViewport(0, 0, Window::GetWidth(), Window::GetHeight());
+	}
+
+	void Pipeline::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+	{
+		m_Viewport.x = x;
+		m_Viewport.y = y;
+		m_Viewport.width = width;
+		m_Viewport.height = height;
+	}
+
+	void Pipeline::ResetScissor()
+	{
+		SetScissor(0, 0, Window::GetWidth(), Window::GetHeight());
+	}
+
+	void Pipeline::SetScissor(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+	{
+		m_Scissor.offset.x = x;
+		m_Scissor.offset.y = y;
+		m_Scissor.extent.width = width;
+		m_Scissor.extent.height = height;
+	}
+
 }
