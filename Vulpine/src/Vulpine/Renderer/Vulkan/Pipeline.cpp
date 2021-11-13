@@ -106,14 +106,25 @@ namespace Vulpine::Vulkan
 
 		VP_ASSERT_VK(vkCreatePipelineLayout(Device::GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &s_PipelineLayout), "Failed to create pipeline layout!");
 
-		// Graphics Pipeline
+		// Dynamic States
+		std::vector dynamicStates = {
+			VK_DYNAMIC_STATE_VIEWPORT,
+			VK_DYNAMIC_STATE_SCISSOR
+		};
 
+		VkPipelineDynamicStateCreateInfo dynamicStateInfo{};
+		dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		
+		dynamicStateInfo.dynamicStateCount = dynamicStates.size();
+		dynamicStateInfo.pDynamicStates = dynamicStates.data();
+
+		// Graphics Pipeline
 		VkGraphicsPipelineCreateInfo pipelineInfo{};
 		pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 
 		pipelineInfo.stageCount = shaderStageInfos.size();
 		pipelineInfo.pStages = shaderStageInfos.data();
-
+		
 		pipelineInfo.pVertexInputState = &vertexInputInfo;
 		pipelineInfo.pInputAssemblyState = &inputAssembly;
 		pipelineInfo.pViewportState = &viewportStateInfo;
@@ -121,7 +132,7 @@ namespace Vulpine::Vulkan
 		pipelineInfo.pMultisampleState = &multisampling;
 		pipelineInfo.pDepthStencilState = nullptr;
 		pipelineInfo.pColorBlendState = &colorBlending;
-		pipelineInfo.pDynamicState = nullptr;
+		pipelineInfo.pDynamicState = &dynamicStateInfo;
 
 		pipelineInfo.layout = s_PipelineLayout;
 
