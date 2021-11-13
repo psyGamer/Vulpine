@@ -5,6 +5,8 @@
 #include "Device.h"
 #include "RenderPass.h"
 
+#include "Semaphore.h"
+
 namespace Vulpine::Vulkan
 {
 	VkSwapchainKHR Swapchain::s_Swapchain = VK_NULL_HANDLE;
@@ -49,6 +51,14 @@ namespace Vulpine::Vulkan
 		}
 
 		vkDestroySwapchainKHR(Device::GetLogicalDevice(), s_Swapchain, nullptr);
+	}
+
+	uint32_t Swapchain::AcquireNextImageIndex(const Semaphore& semaphore)
+	{
+		uint32_t imageIndex;
+		vkAcquireNextImageKHR(Device::GetLogicalDevice(), s_Swapchain, UINT64_MAX, semaphore.GetSemaphore(), VK_NULL_HANDLE, &imageIndex);
+
+		return imageIndex;
 	}
 
 	void Swapchain::SetupSwapchain()

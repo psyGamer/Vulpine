@@ -4,12 +4,16 @@
 
 namespace Vulpine::Vulkan
 {
+	class Semaphore;
+
 	class Swapchain
 	{
 	public:
 		static void Create();
 		static void Recreate();
 		static void Destroy();
+
+		static uint32_t AcquireNextImageIndex(const Semaphore& semaphore);
 
 		static const VkSwapchainKHR& GetSwapchain() { return s_Swapchain; }
 
