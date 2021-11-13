@@ -124,6 +124,10 @@ namespace Vulpine::Vulkan
 
 	void Instance::Destory()
 	{
+		Device::Destory();
+
+		Window::DestroySurface(s_Instance);
+
 #ifdef VULKAN_VALIDATION
 		auto destroyDebugUtilsMessengerFunc = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(s_Instance, "vkDestroyDebugUtilsMessengerEXT");
 		if (destroyDebugUtilsMessengerFunc != nullptr)
