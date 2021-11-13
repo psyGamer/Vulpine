@@ -1,4 +1,4 @@
-#pragma onc
+#pragma once
 
 #include "Vulkan/Vulkan.h"
 
