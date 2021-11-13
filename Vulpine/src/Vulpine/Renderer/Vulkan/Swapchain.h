@@ -17,6 +17,9 @@ namespace Vulpine::Vulkan
 		static const std::vector<VkImageView>& GetImageViews() { return s_ImageViews; }
 		static const std::vector<VkFramebuffer>& GetFramebuffers() { return s_Framebuffers; }
 
+		static const VkExtent2D& GetFramebufferSize() { return s_FramebufferSize; }
+		static const VkFormat& GetImageFormat() { return s_ImageFormat; }
+
 	private:
 		struct SwapchainSupportInfo
 		{
@@ -41,7 +44,5 @@ namespace Vulpine::Vulkan
 
 		static VkExtent2D s_FramebufferSize;
 		static VkFormat s_ImageFormat;
-
-		friend class RenderPass;
 	};
 }

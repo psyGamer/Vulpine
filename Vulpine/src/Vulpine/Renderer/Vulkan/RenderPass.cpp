@@ -11,7 +11,7 @@ namespace Vulpine::Vulkan
 	void RenderPass::Create()
 	{
 		VkAttachmentDescription colorAttachment{};
-		colorAttachment.format = Swapchain::s_ImageFormat;
+		colorAttachment.format = Swapchain::GetImageFormat();
 		colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
 		colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
