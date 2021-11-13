@@ -12,8 +12,12 @@ namespace Vulpine::Vulkan
 		VP_ASSERT(entryPoint.empty(), "Shader entrypoint can't be an empty string!");
 
 		m_ShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		m_ShaderStageInfo.pNext = nullptr;
+		m_ShaderStageInfo.flags = 0;
+		
+		m_EntryPoint = entryPoint;
 
-		m_ShaderStageInfo.pName = entryPoint.c_str();
+		m_ShaderStageInfo.pName = m_EntryPoint.c_str();
 		m_ShaderStageInfo.pSpecializationInfo = nullptr;
 
 		switch (type)
@@ -37,7 +41,7 @@ namespace Vulpine::Vulkan
 
 	Shader::~Shader()
 	{
-		vkDestroyShaderModule(Device::GetLogicalDevice(), m_ShaderModule, nullptr);
+		Destroy();
 	}
 
 	void Shader::Load(const std::string& filePath)
@@ -59,5 +63,10 @@ namespace Vulpine::Vulkan
 		VP_ASSERT_VK(vkCreateShaderModule(Device::GetLogicalDevice(), &shaderCreateInfo, nullptr, &m_ShaderModule), "Failed to create shader module!");
 
 		m_ShaderStageInfo.module = m_ShaderModule;
+	}
+
+	void Shader::Destroy()
+	{
+		vkDestroyShaderModule(Device::GetLogicalDevice(), m_ShaderModule, nullptr);
 	}
 }
