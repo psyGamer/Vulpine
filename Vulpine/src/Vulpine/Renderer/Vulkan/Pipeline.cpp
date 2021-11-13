@@ -31,16 +31,21 @@ namespace Vulpine::Vulkan
 		};
 		
 		// Vertex Input
-		auto bindingDescription = m_VertexBuffer.QueryBindingDescriptions();
-		auto attributeDescriptions = m_VertexBuffer.QueryAttributeDescriptions();
+		//auto bindingDescription = m_VertexBuffer.QueryBindingDescriptions();
+		//auto attributeDescriptions = m_VertexBuffer.QueryAttributeDescriptions();
 
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-		vertexInputInfo.vertexBindingDescriptionCount = 1;
-		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-		vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+		//vertexInputInfo.vertexBindingDescriptionCount = 1;
+		//vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+		//vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+		//vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+
+		vertexInputInfo.vertexBindingDescriptionCount = 0;
+		vertexInputInfo.pVertexBindingDescriptions = nullptr;
+		vertexInputInfo.vertexAttributeDescriptionCount = 0;
+		vertexInputInfo.pVertexAttributeDescriptions = nullptr;
 
 		// Input Assembly
 		VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
