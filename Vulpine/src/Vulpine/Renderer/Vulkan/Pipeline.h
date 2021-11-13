@@ -2,27 +2,31 @@
 
 #include "Vulkan.h"
 
+#include "Shader.h"
+#include "VertexBuffer.h"
+
 namespace Vulpine::Vulkan
 {
-	class Shader;
-
 	class Pipeline
 	{
 	public:
-		static void Create();
-		static void Destroy();
+		Pipeline(const Shader& vertexShader, const Shader& fragmentShader, const VertexBuffer& vertexBuffer);
+		~Pipeline();
+
+		void Create();
+		void Destroy();
 
 	private:
-		static VkPipeline s_Pipeline;
-		static VkPipelineLayout s_PipelineLayout;
+		VkPipeline m_Pipeline;
+		VkPipelineLayout m_PipelineLayout;
 
-		static Shader s_VertexShader;
-		static Shader s_FragmentShader;
+		Shader m_VertexShader;
+		Shader m_FragmentShader;
 
-		static VertexBuffer s_VertexBufffer;
+		VertexBuffer m_VertexBuffer;
 
-		static VkViewport s_Viewport;
-		static VkRect2D s_Scissor;
+		VkViewport m_Viewport;
+		VkRect2D m_Scissor;
 	};
 }
 

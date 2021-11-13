@@ -1,30 +1,44 @@
 #include "vppch.h"
 #include "Pipeline.h"
 
+#include "Core/Window.h"
+
 #include "Device.h"
 #include "RenderPass.h"
 
-#include "Shader.h"
-#include "Renderer/VertexBuffer.h"
-
 namespace Vulpine::Vulkan
 {
+	Pipeline::Pipeline(const Shader& vertexShader, const Shader& fragmentShader, const VertexBuffer& vertexBuffer)
+		: m_VertexShader(vertexShader), m_FragmentShader(fragmentShader), m_VertexBuffer(vertexBuffer)
+	{
+		m_Pipeline = VK_NULL_HANDLE;
+		m_PipelineLayout = VK_NULL_HANDLE;
+
+		m_Viewport = {};
+		m_Scissor = {};
+	}
+
+	Pipeline::~Pipeline()
+	{
+		Destroy();
+	}
+
 	void Pipeline::Create()
 	{
 		// Shader Stages
 		std::vector<VkPipelineShaderStageCreateInfo> shaderStageInfos = {
-			s_VertexShader.GetShaderStageInfo(), s_FragmentShader.GetShaderStageInfo()
+			m_VertexShader.GetShaderStageInfo(), m_FragmentShader.GetShaderStageInfo()
 		};
 		
 		// Vertex Input
-		auto bindingDescriptions = s_VertexBufffer.QueryBindingDescriptions();
-		auto attributeDescriptions = s_VertexBufffer.QueryAttributeDescriptions();
+		auto bindingDescription = m_VertexBuffer.QueryBindingDescriptions();
+		auto attributeDescriptions = m_VertexBuffer.QueryAttributeDescriptions();
 
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-		vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
-		vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
+		vertexInputInfo.vertexBindingDescriptionCount = 1;
+		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
 		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
 		vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
@@ -40,9 +54,9 @@ namespace Vulpine::Vulkan
 		viewportStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 
 		viewportStateInfo.viewportCount = 1;
-		viewportStateInfo.pViewports = &s_Viewport;
+		viewportStateInfo.pViewports = &m_Viewport;
 		viewportStateInfo.scissorCount = 1;
-		viewportStateInfo.pScissors = &s_Scissor;
+		viewportStateInfo.pScissors = &m_Scissor;
 
 		// Rasterizer
 		VkPipelineRasterizationStateCreateInfo rasterizer{};
@@ -104,7 +118,7 @@ namespace Vulpine::Vulkan
 		pipelineLayoutInfo.pushConstantRangeCount = 0;
 		pipelineLayoutInfo.pPushConstantRanges = nullptr;
 
-		VP_ASSERT_VK(vkCreatePipelineLayout(Device::GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &s_PipelineLayout), "Failed to create pipeline layout!");
+		VP_ASSERT_VK(vkCreatePipelineLayout(Device::GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout), "Failed to create pipeline layout!");
 
 		// Dynamic States
 		std::vector dynamicStates = {
@@ -134,7 +148,7 @@ namespace Vulpine::Vulkan
 		pipelineInfo.pColorBlendState = &colorBlending;
 		pipelineInfo.pDynamicState = &dynamicStateInfo;
 
-		pipelineInfo.layout = s_PipelineLayout;
+		pipelineInfo.layout = m_PipelineLayout;
 
 		pipelineInfo.renderPass = RenderPass::GetRenderPass();
 		pipelineInfo.subpass = 0;
@@ -142,12 +156,12 @@ namespace Vulpine::Vulkan
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 		pipelineInfo.basePipelineIndex = -1;
 
-		VP_ASSERT_VK(vkCreateGraphicsPipelines(Device::GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &s_Pipeline), "Failed to create graphics pipeline!");
+		VP_ASSERT_VK(vkCreateGraphicsPipelines(Device::GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_Pipeline), "Failed to create graphics pipeline!");
 	}
 
 	void Pipeline::Destroy()
 	{
-		vkDestroyPipeline(Device::GetLogicalDevice(), s_Pipeline, nullptr);
-		vkDestroyPipelineLayout(Device::GetLogicalDevice(), s_PipelineLayout, nullptr);
+		vkDestroyPipeline(Device::GetLogicalDevice(), m_Pipeline, nullptr);
+		vkDestroyPipelineLayout(Device::GetLogicalDevice(), m_PipelineLayout, nullptr);
 	}
 }
