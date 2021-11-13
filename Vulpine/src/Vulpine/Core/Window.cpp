@@ -6,7 +6,7 @@ namespace Vulpine
 	GLFWwindow* Window::s_Window = nullptr;
 	std::string Window::s_WindowTitle = "";
 
-	uint32_t Window::s_Width = 0, Window::s_Height = 0;
+	int Window::s_Width = 0, Window::s_Height = 0;
 
 	VkSurfaceKHR Window::s_Surface = VK_NULL_HANDLE;
 	
@@ -21,6 +21,8 @@ namespace Vulpine
 		s_WindowTitle = windowTitle;
 
 		glfwSetWindowSizeCallback(s_Window, OnWindowResize);
+
+		glfwGetWindowSize(s_Window, &s_Width, &s_Height);
 	}
 
 	void Window::Destroy()
@@ -53,6 +55,6 @@ namespace Vulpine
 
 	void Window::OnWindowResize(GLFWwindow* window, int width, int height)
 	{
-
+		glfwGetWindowSize(s_Window, &s_Width, &s_Height);
 	}
 }

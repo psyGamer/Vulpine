@@ -34,7 +34,7 @@ namespace Vulpine
 		static GLFWwindow* s_Window;
 		static std::string s_WindowTitle;
 
-		static uint32_t s_Width, s_Height;
+		static int s_Width, s_Height;
 
 		static VkSurfaceKHR s_Surface;
 	};
