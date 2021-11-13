@@ -75,6 +75,9 @@ namespace Vulpine::Vulkan
 
 			vkCmdBindPipeline(s_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.GetPipeline());
 
+			vkCmdSetViewport(s_CommandBuffers[i], 0, 1, &pipeline.GetViewport());
+			vkCmdSetScissor(s_CommandBuffers[i], 0, 1, &pipeline.GetScissor());
+
 			vkCmdDraw(s_CommandBuffers[i], 3, 1, 0, 0);
 
 			vkCmdEndRenderPass(s_CommandBuffers[i]);

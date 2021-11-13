@@ -15,7 +15,9 @@ namespace Vulpine::Vulkan
 		m_PipelineLayout = VK_NULL_HANDLE;
 
 		m_Viewport = {};
+		ResetViewport();
 		m_Scissor = {};
+		ResetScissor();
 	}
 
 	Pipeline::~Pipeline()
