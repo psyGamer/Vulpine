@@ -36,6 +36,11 @@ namespace Vulpine
 		glfwCreateWindowSurface(instance, s_Window, nullptr, &s_Surface);
 	}
 
+	void Window::DestroySurface(const VkInstance& instance)
+	{
+		vkDestroySurfaceKHR(instance, s_Surface, nullptr);
+	}
+
 	VkExtent2D Window::QueryFramebufferSize()
 	{
 		int width, height;

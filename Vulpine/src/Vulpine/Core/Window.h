@@ -14,6 +14,7 @@ namespace Vulpine
 		static void Destroy();
 
 		static void CreateSurface(const VkInstance& instance);
+		static void DestroySurface(const VkInstance& instance);
 
 		static VkExtent2D QueryFramebufferSize();
 
