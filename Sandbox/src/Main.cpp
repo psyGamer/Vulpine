@@ -29,11 +29,12 @@ void MAIN()
 	Shader vertShader("src/shader.vert.spv", Shader::Type::VERTEX);
 	Shader fragShader("src/shader.frag.spv", Shader::Type::FRAGMENT);
 
-	VertexBuffer vertBuffer(0, {
-		VertexAttributeValue::F32VEC2
+	VertexBuffer vertBuffer({
+		VertexAttribute::F32VEC2
 	});
 
-	Pipeline pipeline(vertShader, fragShader, vertBuffer);
+	Pipeline pipeline(vertShader, fragShader);
+
 	pipeline.Create();
 
 	vertShader.Destroy();
