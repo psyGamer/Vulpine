@@ -8,8 +8,8 @@
 
 namespace Vulpine::Vulkan
 {
-	Pipeline::Pipeline(const Shader& vertexShader, const Shader& fragmentShader, const VertexBuffer& vertexBuffer)
-		: m_VertexShader(vertexShader), m_FragmentShader(fragmentShader), m_VertexBuffer(vertexBuffer)
+	Pipeline::Pipeline(const Shader& vertexShader, const Shader& fragmentShader)
+		: m_VertexShader(vertexShader), m_FragmentShader(fragmentShader)
 	{
 		m_Pipeline = VK_NULL_HANDLE;
 		m_PipelineLayout = VK_NULL_HANDLE;
@@ -33,21 +33,17 @@ namespace Vulpine::Vulkan
 		};
 		
 		// Vertex Input
-		//auto bindingDescription = m_VertexBuffer.QueryBindingDescriptions();
-		//auto attributeDescriptions = m_VertexBuffer.QueryAttributeDescriptions();
+		auto bindingDescription = m_pVertexBuffer->QueryBindingDescriptions(0);
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+		m_pVertexBuffer->QueryAttributeDescriptions(0, &attributeDescriptions);
 
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-		//vertexInputInfo.vertexBindingDescriptionCount = 1;
-		//vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-		//vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-		//vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-
-		vertexInputInfo.vertexBindingDescriptionCount = 0;
-		vertexInputInfo.pVertexBindingDescriptions = nullptr;
-		vertexInputInfo.vertexAttributeDescriptionCount = 0;
-		vertexInputInfo.pVertexAttributeDescriptions = nullptr;
+		vertexInputInfo.vertexBindingDescriptionCount = 1;
+		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+		vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
 		// Input Assembly
 		VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
@@ -170,6 +166,11 @@ namespace Vulpine::Vulkan
 	{
 		vkDestroyPipeline(Device::GetLogicalDevice(), m_Pipeline, nullptr);
 		vkDestroyPipelineLayout(Device::GetLogicalDevice(), m_PipelineLayout, nullptr);
+	}
+
+	void Pipeline::SetVertexBuffer(const VertexBuffer& vertexBuffer)
+	{
+		m_pVertexBuffer = Reference<const VertexBuffer>(&vertexBuffer);
 	}
 
 	void Pipeline::ResetViewport()
