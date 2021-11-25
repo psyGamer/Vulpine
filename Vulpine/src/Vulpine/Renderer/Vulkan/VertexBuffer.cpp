@@ -72,39 +72,39 @@ namespace Vulpine::Vulkan
 		{
 		case VertexAttribute::INT8:
 		case VertexAttribute::UINT8:
-			return 8;
+			return 1;
 			
 		case VertexAttribute::INT16:
 		case VertexAttribute::UINT16:
-			return 16;
+			return 2;
 
 		case VertexAttribute::INT32:
 		case VertexAttribute::UINT32:
 		case VertexAttribute::FLOAT32:
-			return 32;
+			return 4;
 
 		case VertexAttribute::FLOAT64:
-			return 64;
+			return 8;
 
 		case VertexAttribute::I32VEC2:
 		case VertexAttribute::F32VEC2:
 		case VertexAttribute::U32VEC2:
-			return 32 * 2;
+			return 4 * 2;
 		case VertexAttribute::I32VEC3:
 		case VertexAttribute::F32VEC3:
 		case VertexAttribute::U32VEC3:
-			return 32 * 3;
+			return 4 * 3;
 		case VertexAttribute::U32VEC4:
 		case VertexAttribute::F32VEC4:
 		case VertexAttribute::I32VEC4:
-			return 32 * 4;
+			return 4 * 4;
 
 		case VertexAttribute::F64VEC2:
-			return 64 * 2;
+			return 8 * 2;
 		case VertexAttribute::F64VEC3:
-			return 64 * 3;
+			return 8 * 3;
 		case VertexAttribute::F64VEC4:
-			return 64 * 4;
+			return 8 * 4;
 		}
 	}
 
