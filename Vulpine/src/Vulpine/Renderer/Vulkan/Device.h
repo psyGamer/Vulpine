@@ -17,10 +17,11 @@ namespace Vulpine::Vulkan
 
 			std::optional<uint32_t> GraphicsQueueIndex;
 			std::optional<uint32_t> PresentQueueIndex;
+			std::optional<uint32_t> TransferQueueIndex;
 
 			bool QueueIndicesFound() const
 			{
-				return GraphicsQueueIndex.has_value() && PresentQueueIndex.has_value();
+				return GraphicsQueueIndex.has_value() && PresentQueueIndex.has_value() && TransferQueueIndex.has_value();
 			}
 		};
 
@@ -34,6 +35,7 @@ namespace Vulpine::Vulkan
 
 		static const VkQueue& GetGraphicsQueue() { return s_GraphicsQueue; }
 		static const VkQueue& GetPresentQueue() { return s_PresentQueue; }
+		static const VkQueue& GetTransferQueue() { return s_TransferQueue; }
 
 	private:
 		static PhysicalDeviceInfo ChoseOptimalPhysicalDevice(const VkInstance& instance);
@@ -48,6 +50,7 @@ namespace Vulpine::Vulkan
 
 		static VkQueue s_GraphicsQueue;
 		static VkQueue s_PresentQueue;
+		static VkQueue s_TransferQueue;
 
 		friend class Swapchain;
 	};
