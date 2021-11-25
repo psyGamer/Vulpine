@@ -29,59 +29,70 @@ void MAIN()
 	Shader vertShader("src/shader.vert.spv", Shader::Type::VERTEX);
 	Shader fragShader("src/shader.frag.spv", Shader::Type::FRAGMENT);
 
-	VertexBuffer vertBuffer({
-		VertexAttribute::F32VEC2
-	});
-
-	Pipeline pipeline(vertShader, fragShader);
-
-	pipeline.Create();
-
-	vertShader.Destroy();
-	fragShader.Destroy();
-
-	CommandPool::Create();
-	CommandBuffers::Create();
-	CommandBuffers::Record(pipeline);
-
-	Semaphore imageAvailableSemaphore;
-	Semaphore renderFinishedSemaphore;
-
-	while (!glfwWindowShouldClose(Vulpine::Window::GetWindow()))
 	{
-		glfwWaitEvents();
+		VertexBuffer vertBuffer({
+			VertexAttribute::F32VEC2,
+			VertexAttribute::F32VEC3
+		}, 3);
 
-		uint32_t imageIndex = Swapchain::AcquireNextImageIndex(imageAvailableSemaphore);
-		CommandBuffers::Submit(imageIndex, imageAvailableSemaphore, renderFinishedSemaphore);
+		const float positions[] = {
+			// Position	  // Color
+			 0.0f, -0.5f, 0.75f, 0.50f, 0.00f, // Top
+			 0.5f,  0.5f, 0.00f, 0.75f, 0.50f, // Right
+			-0.5f,  0.5f, 0.50f, 0.00f, 0.75f, // Left
+		};
 
-		VkPresentInfoKHR presentInfo{};
-		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+		Pipeline pipeline(vertShader, fragShader);
+		pipeline.AddVertexBuffer(vertBuffer);
+		pipeline.Create();
 
-		VkSemaphore renderFinished = renderFinishedSemaphore.GetSemaphore();
+		vertShader.Destroy();
+		fragShader.Destroy();
 
-		presentInfo.waitSemaphoreCount = 1;
-		presentInfo.pWaitSemaphores = &renderFinished;
+		CommandPool::Create();
+		CommandBuffers::Create();
+		vertBuffer.SetData(&positions);
+		CommandBuffers::Record(pipeline);
 
-		VkSwapchainKHR swapChains[] = { Swapchain::GetSwapchain() };
+		Semaphore imageAvailableSemaphore;
+		Semaphore renderFinishedSemaphore;
 
-		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = swapChains;
-		presentInfo.pImageIndices = &imageIndex;
+		while (!glfwWindowShouldClose(Vulpine::Window::GetWindow()))
+		{
+			glfwWaitEvents();
 
-		presentInfo.pResults = nullptr;
+			uint32_t imageIndex = Swapchain::AcquireNextImageIndex(imageAvailableSemaphore);
+			CommandBuffers::Submit(imageIndex, imageAvailableSemaphore, renderFinishedSemaphore);
 
-		vkQueuePresentKHR(Device::GetPresentQueue(), &presentInfo);
+			VkPresentInfoKHR presentInfo{};
+			presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+			VkSemaphore renderFinished = renderFinishedSemaphore.GetSemaphore();
+
+			presentInfo.waitSemaphoreCount = 1;
+			presentInfo.pWaitSemaphores = &renderFinished;
+
+			VkSwapchainKHR swapChains[] = { Swapchain::GetSwapchain() };
+
+			presentInfo.swapchainCount = 1;
+			presentInfo.pSwapchains = swapChains;
+			presentInfo.pImageIndices = &imageIndex;
+
+			presentInfo.pResults = nullptr;
+
+			vkQueuePresentKHR(Device::GetPresentQueue(), &presentInfo);
+		}
+
+		vkDeviceWaitIdle(Device::GetLogicalDevice());
+
+		imageAvailableSemaphore.Destroy();
+		renderFinishedSemaphore.Destroy();
+
+		CommandBuffers::Destroy();
+		CommandPool::Destroy();
+
+		pipeline.Destroy();
 	}
-
-	vkDeviceWaitIdle(Device::GetLogicalDevice());
-
-	imageAvailableSemaphore.Destroy();
-	renderFinishedSemaphore.Destroy();
-
-	CommandBuffers::Destroy();
-	CommandPool::Destroy();
-
-	pipeline.Destroy();
 
 	Swapchain::Destroy();
 	Instance::Destory();
