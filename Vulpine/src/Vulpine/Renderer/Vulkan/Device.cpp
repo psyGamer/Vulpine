@@ -14,6 +14,7 @@ namespace Vulpine::Vulkan
 
 	VkQueue Device::s_GraphicsQueue = VK_NULL_HANDLE;
 	VkQueue Device::s_PresentQueue = VK_NULL_HANDLE;
+	VkQueue Device::s_TransferQueue = VK_NULL_HANDLE;
 
 	void Device::Create(const VkInstance& instance)
 	{
@@ -27,7 +28,8 @@ namespace Vulpine::Vulkan
 			// Prevent queue duplication when the graphics and present are the same
 			const std::unordered_set<uint32_t> uniqueQueueIndices = {
 				s_PhysicalDeviceInfo.GraphicsQueueIndex.value(),
-				s_PhysicalDeviceInfo.PresentQueueIndex.value()
+				s_PhysicalDeviceInfo.PresentQueueIndex.value(),
+				s_PhysicalDeviceInfo.TransferQueueIndex.value()
 			};
 
 			for (const uint32_t queueIndex : uniqueQueueIndices)
@@ -69,6 +71,7 @@ namespace Vulpine::Vulkan
 
 		vkGetDeviceQueue(s_LogicalDevice, s_PhysicalDeviceInfo.GraphicsQueueIndex.value(), 0, &s_GraphicsQueue);
 		vkGetDeviceQueue(s_LogicalDevice, s_PhysicalDeviceInfo.PresentQueueIndex.value(), 0, &s_PresentQueue);
+		vkGetDeviceQueue(s_LogicalDevice, s_PhysicalDeviceInfo.TransferQueueIndex.value(), 0, &s_TransferQueue);
 	}
 
 	void Device::Destory()
@@ -131,6 +134,9 @@ namespace Vulpine::Vulkan
 		{
 			if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 				physicalDeviceInfo.GraphicsQueueIndex = i;
+
+			if (queueFamilies[i].queueFlags & VK_QUEUE_TRANSFER_BIT)
+				physicalDeviceInfo.TransferQueueIndex = i;
 
 			VkBool32 presentSupport;
 			vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, Window::GetSurface(), &presentSupport);

@@ -78,6 +78,11 @@ namespace Vulpine::Vulkan
 			vkCmdSetViewport(s_CommandBuffers[i], 0, 1, &pipeline.GetViewport());
 			vkCmdSetScissor(s_CommandBuffers[i], 0, 1, &pipeline.GetScissor());
 
+			const VkDeviceSize offsets[] = { 0 };
+			const VkBuffer vertexBuffer = pipeline.GetVertexBuffer()->GetBuffer();
+
+			vkCmdBindVertexBuffers(s_CommandBuffers[i], 0, 1, &vertexBuffer, offsets);
+
 			vkCmdDraw(s_CommandBuffers[i], 3, 1, 0, 0);
 
 			vkCmdEndRenderPass(s_CommandBuffers[i]);

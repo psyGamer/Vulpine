@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Base.h"
+
 #include "Vulkan.h"
 
 #include "Shader.h"
@@ -10,11 +12,13 @@ namespace Vulpine::Vulkan
 	class Pipeline
 	{
 	public:
-		Pipeline(const Shader& vertexShader, const Shader& fragmentShader, const VertexBuffer& vertexBuffer);
+		Pipeline(const Shader& vertexShader, const Shader& fragmentShader);
 		~Pipeline();
 
 		void Create();
 		void Destroy();
+
+		void SetVertexBuffer(const VertexBuffer& vertexBuffer);
 
 		void ResetViewport();
 		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
@@ -23,6 +27,8 @@ namespace Vulpine::Vulkan
 		void ResetScissor();
 		void SetScissor(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 		VkRect2D GetScissor() const { return m_Scissor; }
+
+		Reference<const VertexBuffer> GetVertexBuffer() const { return m_pVertexBuffer; }
 
 		const VkPipeline& GetPipeline() const { return m_Pipeline; }
 		const VkPipelineLayout& GetPipelineLayout() const { return m_PipelineLayout; }
@@ -34,7 +40,7 @@ namespace Vulpine::Vulkan
 		Shader m_VertexShader;
 		Shader m_FragmentShader;
 
-		VertexBuffer m_VertexBuffer;
+		Reference<const VertexBuffer> m_pVertexBuffer;
 
 		VkViewport m_Viewport;
 		VkRect2D m_Scissor;

@@ -2,55 +2,47 @@
 
 #include "Vulkan/Vulkan.h"
 
+#include "Buffer.h"
+
 namespace Vulpine::Vulkan
 {
-	enum class VertexAttributeValue
+	enum class VertexAttribute
 	{
-		INT8 = VK_FORMAT_R8_SINT,
-		UINT8 = VK_FORMAT_R8_UINT,
-		INT16 = VK_FORMAT_R16_SINT,
-		UINT16 = VK_FORMAT_R16_UINT,
-		INT32 = VK_FORMAT_R32_SINT,
-		UINT32 = VK_FORMAT_R32_UINT,
+		INT8, INT16, INT32, INT64,
+		UINT8, UINT16, UINT32, UINT64,
 
-		FLOAT32 = VK_FORMAT_R32_SFLOAT,
-		DOUBLE64 = VK_FORMAT_R64_SFLOAT,
+		FLOAT32, FLOAT64,
 
-		F32VEC2 = VK_FORMAT_R32G32_SFLOAT,
-		F32VEC3 = VK_FORMAT_R32G32B32_SFLOAT,
-		F32VEC4 = VK_FORMAT_R32G32B32A32_SFLOAT,
+		I32VEC2, I32VEC3, I32VEC4,
+		U32VEC2, U32VEC3, U32VEC4,
 
-		D64VEC2 = VK_FORMAT_R64G64_SFLOAT,
-		D64VEC3 = VK_FORMAT_R64G64B64_SFLOAT,
-		D64VEC4 = VK_FORMAT_R64G64B64A64_SFLOAT,
-
-		I32VEC2 = VK_FORMAT_R32G32_SINT,
-		I32VEC3 = VK_FORMAT_R32G32B32_SINT,
-		I32VEC4 = VK_FORMAT_R32G32B32A32_SINT,
-
-		U32VEC2 = VK_FORMAT_R32G32_UINT,
-		U32VEC3 = VK_FORMAT_R32G32B32_UINT,
-		U32VEC4 = VK_FORMAT_R32G32B32A32_UINT
+		F32VEC2, F32VEC3, F32VEC4,
+		F64VEC2, F64VEC3, F64VEC4
 	};
 
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(uint32_t bindingIndex);
-		VertexBuffer(uint32_t bindingIndex, std::initializer_list<VertexAttributeValue> vertexAttributes);
 
-		void AddAttribute(VertexAttributeValue vertexAttribute);
+		VertexBuffer();
+		VertexBuffer(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount);
 
+		void SetLayout(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount);
+
+		void SetData(const void* const data);
+
+		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
 	private:
-		VkVertexInputBindingDescription QueryBindingDescriptions();
-		const std::vector<VkVertexInputAttributeDescription>& QueryAttributeDescriptions();
+		VkVertexInputBindingDescription QueryBindingDescriptions(uint32_t bindingIndex) const;
+		void QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer) const;
 
-		static uint32_t QueryVertexAttributeSize(const VertexAttributeValue& vertexAttribute);
-		static VkFormat QueryVertexAttributeFormat(const VertexAttributeValue& vertexAttribute);
+		static uint32_t QueryVertexAttributeSize(const VertexAttribute& vertexAttribute);
+		static VkFormat QueryVertexAttributeFormat(const VertexAttribute& vertexAttribute);
 
-	private:
-		uint32_t m_BindingIndex;
-		std::vector<VertexAttributeValue> m_VertexAttributes;
+	public:
+		Reference<Buffer> m_pBuffer;
+
+		std::vector<VertexAttribute> m_VertexAttributes;
 
 		friend class Pipeline;
 	};
