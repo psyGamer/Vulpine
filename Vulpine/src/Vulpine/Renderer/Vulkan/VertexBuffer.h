@@ -2,6 +2,8 @@
 
 #include "Vulkan/Vulkan.h"
 
+#include "Buffer.h"
+
 namespace Vulpine::Vulkan
 {
 	enum class VertexAttribute
@@ -23,23 +25,22 @@ namespace Vulpine::Vulkan
 	public:
 
 		VertexBuffer();
-		VertexBuffer(const std::initializer_list<VertexAttribute>& vertexAttributes);
+		VertexBuffer(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount);
 
-		void SetLayout(const std::initializer_list<VertexAttribute>& vertexAttributes);
+		void SetLayout(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount);
 
-		void SetData(const void* const data, uint32_t vertexCount);
-		void UploadData();
+		void SetData(const void* const data);
 
+		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
 	private:
-		VkVertexInputBindingDescription QueryBindingDescriptions(uint32_t bindingIndex);
-		void QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer);
+		VkVertexInputBindingDescription QueryBindingDescriptions(uint32_t bindingIndex) const;
+		void QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer) const;
 
 		static uint32_t QueryVertexAttributeSize(const VertexAttribute& vertexAttribute);
 		static VkFormat QueryVertexAttributeFormat(const VertexAttribute& vertexAttribute);
 
-	private:
-		const void* m_Data;
-		size_t m_DataSize;
+	public:
+		Reference<Buffer> m_pBuffer;
 
 		std::vector<VertexAttribute> m_VertexAttributes;
 

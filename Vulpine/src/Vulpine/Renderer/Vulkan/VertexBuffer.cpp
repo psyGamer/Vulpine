@@ -4,35 +4,43 @@
 namespace Vulpine::Vulkan
 {
 	VertexBuffer::VertexBuffer()
+		: m_pBuffer(nullptr)
 	{ }
-	VertexBuffer::VertexBuffer(const std::initializer_list<VertexAttribute>& vertexAttributes)
-		: m_VertexAttributes(vertexAttributes)
-	{ }
+	VertexBuffer::VertexBuffer(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount)
+		: m_pBuffer(nullptr)
+	{
+		SetLayout(vertexAttributes, vertexCount);
+	}
 
-	void VertexBuffer::SetLayout(const std::initializer_list<VertexAttribute>& vertexAttributes)
+	void VertexBuffer::SetLayout(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount)
 	{
 		m_VertexAttributes = vertexAttributes;
-	}
 
-	void VertexBuffer::SetData(const void* const data, uint32_t vertexCount)
-	{
 		size_t size = 0;
 
-		for (const auto& vertexAttribute : m_VertexAttributes)
+		for (const auto& vertexAttribute : vertexAttributes)
 			size += QueryVertexAttributeSize(vertexAttribute);
+		size *= vertexCount;
 
-		m_Data = data;
-		m_DataSize = size * vertexCount;
+		m_pBuffer = CreateReference<Buffer>(size,
+			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+		);
 	}
 
-	VkVertexInputBindingDescription VertexBuffer::QueryBindingDescriptions(uint32_t bindingIndex)
+	void VertexBuffer::SetData(const void* const data)
+	{
+		m_pBuffer->SetData(data);
+	}
+
+	VkVertexInputBindingDescription VertexBuffer::QueryBindingDescriptions(uint32_t bindingIndex) const
 	{
 		uint32_t stride = 0;
 
 		for (const auto& vertexAttribute : m_VertexAttributes)
 			stride += QueryVertexAttributeSize(vertexAttribute);
 
-		VkVertexInputBindingDescription bindingDescription;
+		VkVertexInputBindingDescription bindingDescription{};
 		bindingDescription.binding = bindingIndex;
 		bindingDescription.stride = stride;
 		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
@@ -40,17 +48,17 @@ namespace Vulpine::Vulkan
 		return bindingDescription;
 	}
 
-	void VertexBuffer::QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer)
+	void VertexBuffer::QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionsBuffer) const
 	{
 		uint32_t location = 0, offset = 0;
 
-		attributeDescriptionBuffer->reserve(m_VertexAttributes.size());
+		attributeDescriptionsBuffer->reserve(m_VertexAttributes.size());
 
 		for (const auto& vertexAttribute : m_VertexAttributes)
 		{
-			VkVertexInputAttributeDescription attributeDescription = attributeDescriptionBuffer->emplace_back();
-			attributeDescription.location = location++;
+			VkVertexInputAttributeDescription& attributeDescription = attributeDescriptionsBuffer->emplace_back();
 			attributeDescription.binding = bindingIndex;
+			attributeDescription.location = location++;
 			attributeDescription.format = QueryVertexAttributeFormat(vertexAttribute);
 			attributeDescription.offset = offset;
 
@@ -118,31 +126,31 @@ namespace Vulpine::Vulkan
 			return VK_FORMAT_R32_SINT;
 		case VertexAttribute::UINT32:
 			return VK_FORMAT_R32_UINT;
+
 		case VertexAttribute::FLOAT32:
 			return VK_FORMAT_R32_SFLOAT;
-
 		case VertexAttribute::FLOAT64:
 			return VK_FORMAT_R64_SFLOAT;
 
 		case VertexAttribute::I32VEC2:
 			return VK_FORMAT_R32G32_SINT;
-		case VertexAttribute::F32VEC2:
-			return VK_FORMAT_R32G32_UINT;
 		case VertexAttribute::U32VEC2:
+			return VK_FORMAT_R32G32_UINT;
+		case VertexAttribute::F32VEC2:
 			return VK_FORMAT_R32G32_SFLOAT;
 
 		case VertexAttribute::I32VEC3:
 			return VK_FORMAT_R32G32B32_SINT;
-		case VertexAttribute::F32VEC3:
-			return VK_FORMAT_R32G32B32_UINT;
 		case VertexAttribute::U32VEC3:
+			return VK_FORMAT_R32G32B32_UINT;
+		case VertexAttribute::F32VEC3:
 			return VK_FORMAT_R32G32B32_SFLOAT;
 
-		case VertexAttribute::U32VEC4:
-			return VK_FORMAT_R32G32B32A32_SINT;
-		case VertexAttribute::F32VEC4:
-			return VK_FORMAT_R32G32B32A32_UINT;
 		case VertexAttribute::I32VEC4:
+			return VK_FORMAT_R32G32B32A32_SINT;
+		case VertexAttribute::U32VEC4:
+			return VK_FORMAT_R32G32B32A32_UINT;
+		case VertexAttribute::F32VEC4:
 			return VK_FORMAT_R32G32B32A32_SFLOAT;
 
 		case VertexAttribute::F64VEC2:
