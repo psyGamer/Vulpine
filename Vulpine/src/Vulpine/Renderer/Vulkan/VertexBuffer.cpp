@@ -26,6 +26,8 @@ namespace Vulpine::Vulkan
 			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 		);
+
+		m_VertexCount = vertexCount;
 	}
 
 	void VertexBuffer::SetData(const void* const data)

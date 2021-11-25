@@ -82,9 +82,12 @@ namespace Vulpine::Vulkan
 			const VkBuffer vertexBuffer = pipeline.GetVertexBuffer()->GetBuffer();
 
 			vkCmdBindVertexBuffers(s_CommandBuffers[i], 0, 1, &vertexBuffer, offsets);
-
-			vkCmdDraw(s_CommandBuffers[i], 3, 1, 0, 0);
-
+			vkCmdBindIndexBuffer(s_CommandBuffers[i], pipeline.GetIndexBuffer()->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
+#if 0
+			vkCmdDraw(s_CommandBuffers[i], pipeline.GetVertexBuffer()->GetVertexCount(), 1, 0, 0);
+#else
+			vkCmdDrawIndexed(s_CommandBuffers[i], pipeline.GetIndexBuffer()->GetIndexCount(), 1, 0, 0, 0);
+#endif
 			vkCmdEndRenderPass(s_CommandBuffers[i]);
 
 			VP_ASSERT_VK(vkEndCommandBuffer(s_CommandBuffers[i]), "Failed to record command buffer!");
