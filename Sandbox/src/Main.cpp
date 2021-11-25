@@ -33,17 +33,25 @@ void MAIN()
 		VertexBuffer vertBuffer({
 			VertexAttribute::F32VEC2,
 			VertexAttribute::F32VEC3
-		}, 3);
+		}, 4);
+		IndexBuffer indexBuffer(6);
 
 		const float positions[] = {
 			// Position	  // Color
-			 0.0f, -0.5f, 0.75f, 0.50f, 0.00f, // Top
-			 0.5f,  0.5f, 0.00f, 0.75f, 0.50f, // Right
-			-0.5f,  0.5f, 0.50f, 0.00f, 0.75f, // Left
+			-0.5f, -0.5f, 0.75f, 0.50f, 0.00f, // Top Left
+			 0.5f, -0.5f, 0.75f, 0.00f, 0.50f, // Top Right
+			 0.5f,  0.5f, 0.00f, 0.75f, 0.50f, // Bottom Right
+			-0.5f,  0.5f, 0.50f, 0.00f, 0.75f, // Bottom Left
+		};
+		
+		const uint32_t indices[] = {
+			0, 1, 2,
+			2, 3, 0
 		};
 
 		Pipeline pipeline(vertShader, fragShader);
-		pipeline.AddVertexBuffer(vertBuffer);
+		pipeline.SetVertexBuffer(vertBuffer);
+		pipeline.SetIndexBuffer(indexBuffer);
 		pipeline.Create();
 
 		vertShader.Destroy();
@@ -52,6 +60,7 @@ void MAIN()
 		CommandPool::Create();
 		CommandBuffers::Create();
 		vertBuffer.SetData(&positions);
+		indexBuffer.SetData(&indices);
 		CommandBuffers::Record(pipeline);
 
 		Semaphore imageAvailableSemaphore;
