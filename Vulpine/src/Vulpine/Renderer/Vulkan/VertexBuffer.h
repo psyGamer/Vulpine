@@ -27,11 +27,12 @@ namespace Vulpine::Vulkan
 		VertexBuffer();
 		VertexBuffer(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount);
 
+		void SetData(const void* const data);
 		void SetLayout(const std::initializer_list<VertexAttribute>& vertexAttributes, uint32_t vertexCount);
 
-		void SetData(const void* const data);
-
 		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+
+		uint32_t GetVertexCount() const { return m_VertexCount; }
 	private:
 		VkVertexInputBindingDescription QueryBindingDescriptions(uint32_t bindingIndex) const;
 		void QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer) const;
@@ -42,6 +43,7 @@ namespace Vulpine::Vulkan
 	public:
 		Reference<Buffer> m_pBuffer;
 
+		uint32_t m_VertexCount;
 		std::vector<VertexAttribute> m_VertexAttributes;
 
 		friend class Pipeline;

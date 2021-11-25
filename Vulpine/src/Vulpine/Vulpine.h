@@ -9,4 +9,5 @@
 #include "Renderer/Vulkan/Shader.h"
 #include "Renderer/Vulkan/Swapchain.h"
 #include "Renderer/Vulkan/VertexBuffer.h"
+#include "Renderer/Vulkan/IndexBuffer.h"
 #include "Renderer/Vulkan/Semaphore.h"

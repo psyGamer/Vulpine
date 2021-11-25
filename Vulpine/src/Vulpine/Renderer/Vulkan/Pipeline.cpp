@@ -173,6 +173,11 @@ namespace Vulpine::Vulkan
 		m_pVertexBuffer = Reference<const VertexBuffer>(&vertexBuffer);
 	}
 
+	void Pipeline::SetIndexBuffer(const IndexBuffer& indexBuffer)
+	{
+		m_pIndexBuffer = Reference<const IndexBuffer>(&indexBuffer);
+	}
+
 	void Pipeline::ResetViewport()
 	{
 		SetViewport(0, 0, Window::GetWidth(), Window::GetHeight());
