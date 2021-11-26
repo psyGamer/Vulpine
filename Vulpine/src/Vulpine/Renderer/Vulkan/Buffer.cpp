@@ -32,7 +32,7 @@ namespace Vulpine::Vulkan
 		
 		memoryAllocateInfo.allocationSize = memoryRequirements.size;
 		memoryAllocateInfo.memoryTypeIndex = FindMemoryTypeIndex(memoryRequirements.memoryTypeBits, memoryFlags);
-
+		
 		VP_ASSERT_VK(vkAllocateMemory(Device::GetLogicalDevice(), &memoryAllocateInfo, nullptr, &m_BufferMemory));
 		VP_ASSERT_VK(vkBindBufferMemory(Device::GetLogicalDevice(), m_Buffer, m_BufferMemory, 0));
 	}
@@ -66,7 +66,7 @@ namespace Vulpine::Vulkan
 		VkBufferCopy bufferCopy;
 		bufferCopy.srcOffset = 0;
 		bufferCopy.dstOffset = 0;
-		bufferCopy.size = source.m_BufferSize; // Rather not copy all instead of copying too much
+		bufferCopy.size = std::fmin(source.m_BufferSize, destination.m_BufferSize);
 
 		vkCmdCopyBuffer(commandBuffer, source.m_Buffer, destination.m_Buffer, 1, &bufferCopy);
 
@@ -107,17 +107,17 @@ namespace Vulpine::Vulkan
 		: Buffer(bufferSize, usageFlags, memoryFlags)
 	{
 		VP_ASSERT(
-			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == memoryFlags ||
-			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) == memoryFlags ||
-			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD) == memoryFlags,
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD) != 0,
 
 			"CPU buffer should not be located on the GPU!"
 		);
 
 		VP_ASSERT(!(
-			(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == memoryFlags ||
-			(memoryFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == memoryFlags ||
-			(memoryFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT) == memoryFlags),
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT) != 0),
 
 			"CPU buffer should be located on the CPU!"
 		);
