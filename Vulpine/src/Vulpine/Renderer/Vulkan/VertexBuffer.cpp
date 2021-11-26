@@ -22,7 +22,7 @@ namespace Vulpine::Vulkan
 			size += QueryVertexAttributeSize(vertexAttribute);
 		size *= vertexCount;
 
-		m_pBuffer = CreateReference<Buffer>(size,
+		m_pBuffer = CreateReference<GpuBuffer>(size,
 			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 		);
