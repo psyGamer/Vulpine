@@ -3,6 +3,7 @@
 #include "Vulkan/Vulkan.h"
 
 #include "Buffer.h"
+#include "DataType.h"
 
 namespace Vulpine::Vulkan
 {
