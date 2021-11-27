@@ -83,6 +83,7 @@ namespace Vulpine::Vulkan
 
 			vkCmdBindVertexBuffers(s_CommandBuffers[i], 0, 1, &vertexBuffer, offsets);
 			vkCmdBindIndexBuffer(s_CommandBuffers[i], pipeline.GetIndexBuffer()->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
+			vkCmdBindDescriptorSets(s_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.GetPipelineLayout(), 0, 1, &pipeline.GetUniformBuffer()->GetSets()[i], 0, nullptr);
 #if 0
 			vkCmdDraw(s_CommandBuffers[i], pipeline.GetVertexBuffer()->GetVertexCount(), 1, 0, 0);
 #else

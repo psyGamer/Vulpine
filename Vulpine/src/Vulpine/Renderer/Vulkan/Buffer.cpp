@@ -32,7 +32,7 @@ namespace Vulpine::Vulkan
 		
 		memoryAllocateInfo.allocationSize = memoryRequirements.size;
 		memoryAllocateInfo.memoryTypeIndex = FindMemoryTypeIndex(memoryRequirements.memoryTypeBits, memoryFlags);
-
+		
 		VP_ASSERT_VK(vkAllocateMemory(Device::GetLogicalDevice(), &memoryAllocateInfo, nullptr, &m_BufferMemory));
 		VP_ASSERT_VK(vkBindBufferMemory(Device::GetLogicalDevice(), m_Buffer, m_BufferMemory, 0));
 	}
@@ -43,23 +43,7 @@ namespace Vulpine::Vulkan
 		vkFreeMemory(Device::GetLogicalDevice(), m_BufferMemory, nullptr);
 	}
 
-	void Buffer::SetData(const void* const data)
-	{
-		Buffer stagingBuffer(m_BufferSize,
-			VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-		);
-
-		void* dataPtr;
-
-		vkMapMemory(Device::GetLogicalDevice(), stagingBuffer.m_BufferMemory, 0, stagingBuffer.m_BufferSize, 0, &dataPtr);
-		memcpy(dataPtr, data, static_cast<size_t>(stagingBuffer.m_BufferSize));
-		vkUnmapMemory(Device::GetLogicalDevice(), stagingBuffer.m_BufferMemory);
-
-		CopyFrom(stagingBuffer);
-	}
-
-	void Buffer::Copy(const Buffer& source, const Buffer& target)
+	void Buffer::Copy(const Buffer& source, const Buffer& destination)
 	{
 		// Start single time command buffer
 		// TODO refactor
@@ -82,9 +66,9 @@ namespace Vulpine::Vulkan
 		VkBufferCopy bufferCopy;
 		bufferCopy.srcOffset = 0;
 		bufferCopy.dstOffset = 0;
-		bufferCopy.size = source.m_BufferSize; // Rather not copy all instead of copying too much
+		bufferCopy.size = std::fmin(source.m_BufferSize, destination.m_BufferSize);
 
-		vkCmdCopyBuffer(commandBuffer, source.m_Buffer, target.m_Buffer, 1, &bufferCopy);
+		vkCmdCopyBuffer(commandBuffer, source.m_Buffer, destination.m_Buffer, 1, &bufferCopy);
 
 		// End single time command buffer
 		// TODO refactor
@@ -116,5 +100,68 @@ namespace Vulpine::Vulkan
 		}
 
 		VP_ERROR("Failed to find suitable memory type!");
+	}
+
+	// CPU Buffer
+	CpuBuffer::CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags)
+		: Buffer(bufferSize, usageFlags, memoryFlags)
+	{
+		VP_ASSERT(
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD) != 0,
+
+			"CPU buffer should not be located on the GPU!"
+		);
+
+		VP_ASSERT(!(
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0 ||
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT) != 0),
+
+			"CPU buffer should be located on the CPU!"
+		);
+	}
+
+	void CpuBuffer::SetData(const void* const data)
+	{
+		void* dataPtr;
+
+		vkMapMemory(Device::GetLogicalDevice(), m_BufferMemory, 0, m_BufferSize, 0, &dataPtr);
+		memcpy(dataPtr, data, static_cast<size_t>(m_BufferSize));
+		vkUnmapMemory(Device::GetLogicalDevice(), m_BufferMemory);
+	}
+
+	// GPU Buffer
+	GpuBuffer::GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags)
+		: Buffer(bufferSize, usageFlags, memoryFlags)
+	{
+		VP_ASSERT(
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == memoryFlags ||
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == memoryFlags ||
+			(memoryFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT) == memoryFlags,
+
+			"GPU buffer should not be located on the CPU!"
+		);
+
+		VP_ASSERT(!(
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == memoryFlags ||
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) == memoryFlags ||
+			(memoryFlags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD) == memoryFlags),
+
+			"GPU buffer should be located on the GPU!"
+		);
+	}
+
+	void GpuBuffer::SetData(const void* const data)
+	{
+		CpuBuffer stagingBuffer(m_BufferSize,
+			VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+		);
+
+		stagingBuffer.SetData(data);
+
+		CopyFrom(stagingBuffer);
 	}
 }

@@ -116,8 +116,10 @@ namespace Vulpine::Vulkan
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 
-		pipelineLayoutInfo.setLayoutCount = 0;
-		pipelineLayoutInfo.pSetLayouts = nullptr;
+		VkDescriptorSetLayout setLayout = DescriptorSetLayout::GetSetLayout();
+
+		pipelineLayoutInfo.setLayoutCount = 1;
+		pipelineLayoutInfo.pSetLayouts = &setLayout;
 		pipelineLayoutInfo.pushConstantRangeCount = 0;
 		pipelineLayoutInfo.pPushConstantRanges = nullptr;
 
@@ -166,6 +168,8 @@ namespace Vulpine::Vulkan
 	{
 		vkDestroyPipeline(Device::GetLogicalDevice(), m_Pipeline, nullptr);
 		vkDestroyPipelineLayout(Device::GetLogicalDevice(), m_PipelineLayout, nullptr);
+
+		DescriptorSetLayout::Destroy();
 	}
 
 	void Pipeline::SetVertexBuffer(const VertexBuffer& vertexBuffer)
@@ -176,6 +180,11 @@ namespace Vulpine::Vulkan
 	void Pipeline::SetIndexBuffer(const IndexBuffer& indexBuffer)
 	{
 		m_pIndexBuffer = Reference<const IndexBuffer>(&indexBuffer);
+	}
+
+	void Pipeline::SetUniformBuffer(const UniformBuffer& uniformBuffer)
+	{
+		m_pUniformBuffer = Reference<const UniformBuffer>(&uniformBuffer);
 	}
 
 	void Pipeline::ResetViewport()
