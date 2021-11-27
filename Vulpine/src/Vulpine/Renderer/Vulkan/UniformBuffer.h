@@ -29,4 +29,15 @@ namespace Vulpine::Vulkan
 	private:
 		static VkDescriptorSetLayout s_SetLayout;
 	};
+
+	class DescriptorSet
+	{
+	public:
+		static void Create(const std::vector<VkDescriptorSetLayout>& layouts);
+
+		static std::vector<VkDescriptorSet> GetSets() { return s_Sets; }
+
+	private:
+		static std::vector<VkDescriptorSet> s_Sets;
+	};
 }

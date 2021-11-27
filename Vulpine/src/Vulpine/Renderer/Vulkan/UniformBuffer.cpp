@@ -54,4 +54,19 @@ namespace Vulpine::Vulkan
 	{
 		vkDestroyDescriptorSetLayout(Device::GetLogicalDevice(), s_SetLayout, nullptr);
 	}
+
+	// Descriptor Set
+	std::vector<VkDescriptorSet> DescriptorSet::s_Sets;
+
+	void DescriptorSet::Create(const std::vector<VkDescriptorSetLayout>& layouts)
+	{
+		VkDescriptorSetAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocInfo.descriptorPool = DescriptorPool::GetPool();
+		allocInfo.descriptorSetCount = static_cast<uint32_t>(Swapchain::GetImages().size());
+		allocInfo.pSetLayouts = layouts.data();
+
+		s_Sets.resize(Swapchain::GetImages().size());
+		VP_ASSERT_VK(vkAllocateDescriptorSets(Device::GetLogicalDevice(), &allocInfo, s_Sets.data()), "Failed to allocate descriptor sets!");
+	}
 }
