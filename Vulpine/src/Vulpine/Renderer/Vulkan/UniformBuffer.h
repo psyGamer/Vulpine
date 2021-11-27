@@ -17,4 +17,16 @@ namespace Vulpine::Vulkan
 	private:
 		static VkDescriptorPool s_Pool;
 	};
+
+	class DescriptorSetLayout
+	{
+	public:
+		static void Create();
+		static void Destroy();
+
+		static VkDescriptorSetLayout GetSetLayout() { return s_SetLayout; }
+
+	private:
+		static VkDescriptorSetLayout s_SetLayout;
+	};
 }

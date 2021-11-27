@@ -29,4 +29,29 @@ namespace Vulpine::Vulkan
 	{
 		vkDestroyDescriptorPool(Device::GetLogicalDevice(), s_Pool, nullptr);
 	}
+
+	// Descriptor Set Layout
+	VkDescriptorSetLayout DescriptorSetLayout::s_SetLayout = VK_NULL_HANDLE;
+
+	void DescriptorSetLayout::Create()
+	{
+		VkDescriptorSetLayoutBinding setLayoutBinding{};
+		setLayoutBinding.binding = 0;
+		setLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		setLayoutBinding.descriptorCount = 1;
+
+		setLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+		VkDescriptorSetLayoutCreateInfo setLayoutInfo{};
+		setLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		setLayoutInfo.bindingCount = 1;
+		setLayoutInfo.pBindings = &setLayoutBinding;
+
+		VP_ASSERT_VK(vkCreateDescriptorSetLayout(Device::GetLogicalDevice(), &setLayoutInfo, nullptr, &s_SetLayout), "Failed to create descriptor set layout!");
+	}
+
+	void DescriptorSetLayout::Destroy()
+	{
+		vkDestroyDescriptorSetLayout(Device::GetLogicalDevice(), s_SetLayout, nullptr);
+	}
 }
