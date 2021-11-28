@@ -36,8 +36,7 @@ namespace Vulpine::Vulkan
 #endif
 		};
 
-		std::vector<const char*> instanceExtensions;
-		QueryRequiredExtensions(&instanceExtensions);
+		const std::vector<const char*> instanceExtensions = QueryRequiredExtensions();
 
 		VkInstanceCreateInfo instanceInfo{};
 		instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -67,20 +66,17 @@ namespace Vulpine::Vulkan
 		vkDestroyInstance(s_Instance, nullptr);
 	}
 
-	void Instance::QueryRequiredExtensions(std::vector<const char*>* extensionBuffer)
+	std::vector<const char*> Instance::QueryRequiredExtensions()
 	{
 		uint32_t glfwExtensionCount;
 		auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-#ifdef VP_VULKAN_VALIDATION
-		extensionBuffer->reserve(glfwExtensionCount + 1);
-		extensionBuffer->resize(glfwExtensionCount);
-		*extensionBuffer->data() = *glfwExtensions;
+		std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
-		extensionBuffer->push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-#else
-		extensionBuffer->resize(glfwExtensionCount);
-		*extensionBuffer->data() = *glfwExtensions;
+#ifdef VP_VULKAN_VALIDATION
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 #endif
+
+		return extensions;
 	}
 }

@@ -14,7 +14,7 @@ namespace Vulpine::Vulkan
 	private:
 		Instance();
 
-		static void QueryRequiredExtensions(std::vector<const char*>* extensionBuffer);
+		static std::vector<const char*> QueryRequiredExtensions();
 
 	private:
 		static VkInstance s_Instance;
