@@ -32,10 +32,12 @@ namespace Vulpine::Vulkan
 	}
 #endif
 
+	VkDebugUtilsMessengerEXT DebugMessenger::s_DebugMessenger = VK_NULL_HANDLE;
+	VkDebugUtilsMessengerCreateInfoEXT DebugMessenger::s_DebugMessengerInfo = {};
+
 	void DebugMessenger::Prepare()
 	{
 #ifdef VP_VULKAN_VALIDATION
-		s_DebugMessengerInfo = {};
 		s_DebugMessengerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
 
 #if VP_DEBUG

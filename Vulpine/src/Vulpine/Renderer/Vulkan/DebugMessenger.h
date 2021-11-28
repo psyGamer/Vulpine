@@ -15,7 +15,6 @@ namespace Vulpine::Vulkan
 
 	private:
 		static VkDebugUtilsMessengerEXT s_DebugMessenger;
-
 		static VkDebugUtilsMessengerCreateInfoEXT s_DebugMessengerInfo;
 	};
 }
