@@ -12,7 +12,6 @@
 namespace Vulpine::Vulkan
 {
 	VkCommandPool CommandPool::s_CommandPool = VK_NULL_HANDLE;
-	std::vector<VkCommandBuffer> CommandBuffers::s_CommandBuffers;
 
 	// CommandPool
 	void CommandPool::Create()
@@ -30,9 +29,8 @@ namespace Vulpine::Vulkan
 	{
 		vkDestroyCommandPool(Device::GetLogicalDevice(), s_CommandPool, nullptr);
 	}
-
 	// CommandBuffers
-	void CommandBuffers::Create()
+	CommandBuffer::CommandBuffer(uint32_t commandBufferCount)
 	{
 		s_CommandBuffers.resize(Swapchain::GetFramebuffers().size());
 

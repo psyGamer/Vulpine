@@ -19,19 +19,18 @@ namespace Vulpine::Vulkan
 	class Pipeline;
 	class Semaphore;
 
-	class CommandBuffers
+	class CommandBuffer
 	{
 	public:
-		static void Create();
-		static void Record(const Pipeline& pipeline);
-		static void Destroy();
+		CommandBuffer(uint32_t commandBufferCount);
+		~CommandBuffer();
+		
+		void Submit(uint32_t commandBufferIndex, const Semaphore& waitSemaphore, const Semaphore& signalSemaphore);
 
-		static void Submit(uint32_t commandBufferIndex, const Semaphore& waitSemaphore, const Semaphore& signalSemaphore);
-
-		static const std::vector<VkCommandBuffer>& GetCommandBuffers() { return s_CommandBuffers; }
+		const std::vector<VkCommandBuffer>& GetCommandBuffers() const { return m_CommandBuffers; }
 
 	private:
-		static std::vector<VkCommandBuffer> s_CommandBuffers;
+		std::vector<VkCommandBuffer> m_CommandBuffers;
 	};
 };
 
