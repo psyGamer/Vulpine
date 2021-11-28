@@ -6,8 +6,6 @@
 
 namespace Vulpine::Vulkan
 {
-	class Instance;
-
 	class Device
 	{
 	public:
@@ -21,7 +19,9 @@ namespace Vulpine::Vulkan
 
 			bool QueueIndicesFound() const
 			{
-				return GraphicsQueueIndex.has_value() && PresentQueueIndex.has_value() && TransferQueueIndex.has_value();
+				return GraphicsQueueIndex.has_value() && 
+					   PresentQueueIndex.has_value()  && 
+					   TransferQueueIndex.has_value();
 			}
 		};
 
@@ -36,7 +36,6 @@ namespace Vulpine::Vulkan
 		static const VkQueue& GetGraphicsQueue() { return s_GraphicsQueue; }
 		static const VkQueue& GetPresentQueue() { return s_PresentQueue; }
 		static const VkQueue& GetTransferQueue() { return s_TransferQueue; }
-
 	private:
 		static PhysicalDeviceInfo ChoseOptimalPhysicalDevice(const VkInstance& instance);
 		static PhysicalDeviceInfo QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice);
