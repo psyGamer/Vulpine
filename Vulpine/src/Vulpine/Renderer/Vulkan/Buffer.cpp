@@ -103,6 +103,9 @@ namespace Vulpine::Vulkan
 	}
 
 	// CPU Buffer
+	CpuBuffer::CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags)
+		: CpuBuffer(bufferSize, usageFlags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) { }
+
 	CpuBuffer::CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags)
 		: Buffer(bufferSize, usageFlags, memoryFlags)
 	{
@@ -133,6 +136,9 @@ namespace Vulpine::Vulkan
 	}
 
 	// GPU Buffer
+	GpuBuffer::GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags)
+		: GpuBuffer(bufferSize, usageFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) { }
+
 	GpuBuffer::GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags)
 		: Buffer(bufferSize, usageFlags, memoryFlags)
 	{

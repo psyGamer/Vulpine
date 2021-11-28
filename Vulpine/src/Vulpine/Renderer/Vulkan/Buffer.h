@@ -32,6 +32,7 @@ namespace Vulpine::Vulkan
 	class CpuBuffer : public Buffer
 	{
 	public:
+		CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags);
 		CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags);
 
 		void SetData(const void* const data) override;
@@ -40,6 +41,7 @@ namespace Vulpine::Vulkan
 	class GpuBuffer : public Buffer
 	{
 	public:
+		GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags);
 		GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags);
 
 		void SetData(const void* const data) override;
