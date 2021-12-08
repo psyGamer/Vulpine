@@ -19,10 +19,10 @@ namespace Vulpine::Vulkan
 	class GraphicsCommandPool
 	{
 	public:
-		static void Create() { s_pCommandPool = std::make_shared<CommandPool>(Device::GetGraphicsQueue()); }
+		static void Create();
 		static void Destroy() { s_pCommandPool->~CommandPool(); }
 
-		static const VkCommandPool& GetPool() { return s_pCommandPool->GetPool(); }
+		static const CommandPool& GetPool() { return *s_pCommandPool; }
 
 	private:
 		static std::shared_ptr<CommandPool> s_pCommandPool;
@@ -31,10 +31,10 @@ namespace Vulpine::Vulkan
 	class TransferCommandPool
 	{
 	public:
-		static void Create() { s_pCommandPool = std::make_shared<CommandPool>(Device::GetTransferQueue()); }
+		static void Create();
 		static void Destroy() { s_pCommandPool->~CommandPool(); }
 
-		static const VkCommandPool& GetPool() { return s_pCommandPool->GetPool(); }
+		static const CommandPool& GetPool() { return *s_pCommandPool; }
 
 	private:
 		static std::shared_ptr<CommandPool> s_pCommandPool;

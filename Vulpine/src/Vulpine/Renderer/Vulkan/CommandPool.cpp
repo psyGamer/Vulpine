@@ -23,4 +23,14 @@ namespace Vulpine::Vulkan
 
 	std::shared_ptr<CommandPool> GraphicsCommandPool::s_pCommandPool = nullptr;
 	std::shared_ptr<CommandPool> TransferCommandPool::s_pCommandPool = nullptr;
+
+	void GraphicsCommandPool::Create()
+	{
+		s_pCommandPool = std::make_shared<CommandPool>(Device::GetPhysicalDeviceInfo().GraphicsQueueIndex.value());
+	}
+
+	void TransferCommandPool::Create()
+	{
+		s_pCommandPool = std::make_shared<CommandPool>(Device::GetPhysicalDeviceInfo().TransferQueueIndex.value());
+	}
 }
