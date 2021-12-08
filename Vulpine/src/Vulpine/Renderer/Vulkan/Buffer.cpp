@@ -45,44 +45,15 @@ namespace Vulpine::Vulkan
 
 	void Buffer::Copy(const Buffer& source, const Buffer& destination)
 	{
-		// Start single time command buffer
-		// TODO refactor
-		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
-		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		commandBufferAllocateInfo.commandPool = CommandPool::GetCommandPool();
-		commandBufferAllocateInfo.commandBufferCount = 1;
+		TransferCommandBuffer commandBuffer;
 
-		VkCommandBuffer commandBuffer;
-		VP_ASSERT_VK(vkAllocateCommandBuffers(Device::GetLogicalDevice(), &commandBufferAllocateInfo, &commandBuffer));
-
-		VkCommandBufferBeginInfo commandBufferBeginInfo{};
-		commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-		VP_ASSERT_VK(vkBeginCommandBuffer(commandBuffer, &commandBufferBeginInfo));
-
-		// Copy buffer
 		VkBufferCopy bufferCopy;
 		bufferCopy.srcOffset = 0;
 		bufferCopy.dstOffset = 0;
 		bufferCopy.size = std::fmin(source.m_BufferSize, destination.m_BufferSize);
 
-		vkCmdCopyBuffer(commandBuffer, source.m_Buffer, destination.m_Buffer, 1, &bufferCopy);
-
-		// End single time command buffer
-		// TODO refactor
-		VP_ASSERT_VK(vkEndCommandBuffer(commandBuffer));
-
-		VkSubmitInfo submitInfo{};
-		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &commandBuffer;
-
-		VP_ASSERT_VK(vkQueueSubmit(Device::GetTransferQueue(), 1, &submitInfo, VK_NULL_HANDLE));
-
-		vkQueueWaitIdle(Device::GetTransferQueue());
-		vkFreeCommandBuffers(Device::GetLogicalDevice(), CommandPool::GetCommandPool(), 1, &commandBuffer);
+		commandBuffer.Record(source.m_Buffer, destination.m_Buffer, bufferCopy);
+		commandBuffer.Submit();
 	}
 
 	uint32_t Buffer::FindMemoryTypeIndex(uint32_t supportedTypesBitmask, VkMemoryPropertyFlags requiredTypes)
