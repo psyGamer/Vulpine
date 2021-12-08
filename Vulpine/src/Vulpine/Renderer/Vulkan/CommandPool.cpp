@@ -5,12 +5,12 @@
 
 namespace Vulpine::Vulkan
 {
-	CommandPool::CommandPool(VkQueue queue, VkCommandPoolCreateFlags flags)
+	CommandPool::CommandPool(uint32_t queueIndex, VkCommandPoolCreateFlags flags)
 	{
 		VkCommandPoolCreateInfo commandPoolInfo{};
 		commandPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 
-		commandPoolInfo.queueFamilyIndex = queue;
+		commandPoolInfo.queueFamilyIndex = queueIndex;
 		commandPoolInfo.flags = flags;
 
 		VP_ASSERT_VK(vkCreateCommandPool(Device::GetLogicalDevice(), &commandPoolInfo, nullptr, &m_CommandPool), "Failed to create command pool!");

@@ -7,7 +7,7 @@ namespace Vulpine::Vulkan
 	class CommandPool
 	{
 	public:
-		CommandPool(VkQueue queue, VkCommandPoolCreateFlags flags = 0);
+		CommandPool(uint32_t queueIndex, VkCommandPoolCreateFlags flags = 0);
 		~CommandPool();
 
 		const VkCommandPool& GetPool() const { return m_CommandPool; }
