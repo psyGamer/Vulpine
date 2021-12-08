@@ -48,11 +48,11 @@ namespace Vulpine::Vulkan
 
 		void SetData(const void* const data);
 
-		std::vector<Reference<Buffer>> GetBuffers() const { return m_pBuffers; }
+		std::vector<std::shared_ptr<Buffer>> GetBuffers() const { return m_pBuffers; }
 		std::vector<VkDescriptorSet> GetSets() const { return m_pSets; }
 
 	private:
-		std::vector<Reference<Buffer>> m_pBuffers;
+		std::vector<std::shared_ptr<Buffer>> m_pBuffers;
 		std::vector<VkDescriptorSet> m_pSets;
 	};
 }

@@ -174,17 +174,17 @@ namespace Vulpine::Vulkan
 
 	void Pipeline::SetVertexBuffer(const VertexBuffer& vertexBuffer)
 	{
-		m_pVertexBuffer = Reference<const VertexBuffer>(&vertexBuffer);
+		m_pVertexBuffer = std::shared_ptr<const VertexBuffer>(&vertexBuffer);
 	}
 
 	void Pipeline::SetIndexBuffer(const IndexBuffer& indexBuffer)
 	{
-		m_pIndexBuffer = Reference<const IndexBuffer>(&indexBuffer);
+		m_pIndexBuffer = std::shared_ptr<const IndexBuffer>(&indexBuffer);
 	}
 
 	void Pipeline::SetUniformBuffer(const UniformBuffer& uniformBuffer)
 	{
-		m_pUniformBuffer = Reference<const UniformBuffer>(&uniformBuffer);
+		m_pUniformBuffer = std::shared_ptr<const UniformBuffer>(&uniformBuffer);
 	}
 
 	void Pipeline::ResetViewport()

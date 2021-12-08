@@ -21,6 +21,6 @@ namespace Vulpine::Vulkan
 		vkDestroyCommandPool(Device::GetLogicalDevice(), m_CommandPool, nullptr);
 	}
 
-	Reference<CommandPool> GraphicsCommandPool::s_pCommandPool = nullptr;
-	Reference<CommandPool> TransferCommandPool::s_pCommandPool = nullptr;
+	std::shared_ptr<CommandPool> GraphicsCommandPool::s_pCommandPool = nullptr;
+	std::shared_ptr<CommandPool> TransferCommandPool::s_pCommandPool = nullptr;
 }

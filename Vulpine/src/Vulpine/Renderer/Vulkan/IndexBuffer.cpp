@@ -17,7 +17,7 @@ namespace Vulpine::Vulkan
 
 	void IndexBuffer::SetIndexCount(uint32_t indexCount)
 	{
-		m_pBuffer = CreateReference<GpuBuffer>(sizeof(uint32_t) * indexCount,
+		m_pBuffer = std::make_shared<GpuBuffer>(sizeof(uint32_t) * indexCount,
 			VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 		);

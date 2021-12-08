@@ -17,7 +17,7 @@ namespace Vulpine::Vulkan
 
 		uint32_t GetIndexCount() const { return m_IndexCount; }
 	private:
-		Reference<Buffer> m_pBuffer;
+		std::shared_ptr<Buffer> m_pBuffer;
 
 		uint32_t m_IndexCount;
 	};

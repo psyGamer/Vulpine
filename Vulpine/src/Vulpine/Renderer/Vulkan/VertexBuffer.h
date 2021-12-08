@@ -25,7 +25,7 @@ namespace Vulpine::Vulkan
 		void QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer) const;
 
 	public:
-		Reference<Buffer> m_pBuffer;
+		std::shared_ptr<Buffer> m_pBuffer;
 
 		uint32_t m_VertexCount;
 		std::vector<DataType> m_VertexAttributes;
