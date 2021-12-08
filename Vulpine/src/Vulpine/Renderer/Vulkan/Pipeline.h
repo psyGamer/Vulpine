@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Base.h"
-
 #include "Vulkan.h"
 
 #include "Shader.h"
