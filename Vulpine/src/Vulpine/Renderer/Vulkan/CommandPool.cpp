@@ -5,7 +5,8 @@
 
 namespace Vulpine::Vulkan
 {
-	CommandPool::CommandPool(uint32_t queueIndex, VkCommandPoolCreateFlags flags)
+	CommandPool::CommandPool(VkQueue queue, uint32_t queueIndex, VkCommandPoolCreateFlags flags)
+		: m_Queue(queue), m_CommandPool(VK_NULL_HANDLE)
 	{
 		VkCommandPoolCreateInfo commandPoolInfo{};
 		commandPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -26,11 +27,15 @@ namespace Vulpine::Vulkan
 
 	void GraphicsCommandPool::Create()
 	{
-		s_pCommandPool = std::make_shared<CommandPool>(Device::GetPhysicalDeviceInfo().GraphicsQueueIndex.value());
+		s_pCommandPool = std::make_shared<CommandPool>(
+			Device::GetGraphicsQueue(), Device::GetPhysicalDeviceInfo().GraphicsQueueIndex.value()
+		);
 	}
 
 	void TransferCommandPool::Create()
 	{
-		s_pCommandPool = std::make_shared<CommandPool>(Device::GetPhysicalDeviceInfo().TransferQueueIndex.value());
+		s_pCommandPool = std::make_shared<CommandPool>(
+			Device::GetTransferQueue(), Device::GetPhysicalDeviceInfo().TransferQueueIndex.value()
+		);
 	}
 }

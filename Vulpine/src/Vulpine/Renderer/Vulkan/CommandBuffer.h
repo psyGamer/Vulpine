@@ -12,17 +12,17 @@ namespace Vulpine::Vulkan
 	class CommandBuffer
 	{
 	public:
-		CommandBuffer(const CommandPool commandPool, uint32_t commandBufferCount);
+		CommandBuffer(std::shared_ptr<const CommandPool> pCommandPool, uint32_t commandBufferCount);
 		~CommandBuffer();
 		
-		void Submit(uint32_t commandBufferIndex, VkQueue queue, const Semaphore* pWaitSemaphore = nullptr, const Semaphore* pSignalSemaphore = nullptr);
+		void Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore = nullptr, const Semaphore* pSignalSemaphore = nullptr);
 
 		const std::vector<VkCommandBuffer>& GetCommandBuffers() const { return m_CommandBuffers; }
 
 	protected:
 		std::vector<VkCommandBuffer> m_CommandBuffers;
 	private:
-		CommandPool m_CommandPool;
+		std::shared_ptr<const CommandPool> m_pCommandPool;
 	};
 
 	class GraphicsCommandBuffer : public CommandBuffer
@@ -31,7 +31,6 @@ namespace Vulpine::Vulkan
 		GraphicsCommandBuffer();
 
 		void Record(const Pipeline& pipeline);
-		void Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore = nullptr, const Semaphore* pSignalSemaphore = nullptr);
 	};
 
 	class TransferCommandBuffer : public CommandBuffer

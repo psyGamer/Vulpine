@@ -12,16 +12,16 @@
 namespace Vulpine::Vulkan
 {
 	// CommandBuffers
-	CommandBuffer::CommandBuffer(const CommandPool commandPool, uint32_t commandBufferCount)
-		: m_CommandPool(commandPool)
+	CommandBuffer::CommandBuffer(std::shared_ptr<const CommandPool> pCommandPool, uint32_t commandBufferCount)
+		: m_pCommandPool(pCommandPool)
 	{
 		m_CommandBuffers.resize(commandBufferCount);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = commandPool.GetPool();
+
+		allocInfo.commandPool = m_pCommandPool->GetPool();
 		allocInfo.commandBufferCount = commandBufferCount;
 
 		VP_ASSERT_VK(vkAllocateCommandBuffers(Device::GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()), "Failed to create command buffers!");
@@ -29,10 +29,11 @@ namespace Vulpine::Vulkan
 
 	CommandBuffer::~CommandBuffer()
 	{
-		vkFreeCommandBuffers(Device::GetLogicalDevice(), m_CommandPool.GetPool(), m_CommandBuffers.size(), m_CommandBuffers.data());
+		vkQueueWaitIdle(m_pCommandPool->GetQueue());
+		vkFreeCommandBuffers(Device::GetLogicalDevice(), m_pCommandPool->GetPool(), m_CommandBuffers.size(), m_CommandBuffers.data());
 	}
 
-	void CommandBuffer::Submit(uint32_t commandBufferIndex, VkQueue queue, const Semaphore* pWaitSemaphore, const Semaphore* pSignalSemaphore)
+	void CommandBuffer::Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore, const Semaphore* pSignalSemaphore)
 	{
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -56,7 +57,7 @@ namespace Vulpine::Vulkan
 
 		submitInfo.pWaitDstStageMask = waitStages;
 
-		VP_ASSERT_VK(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE), "Failed to submit draw command buffer!");
+		VP_ASSERT_VK(vkQueueSubmit(m_pCommandPool->GetQueue(), 1, &submitInfo, VK_NULL_HANDLE), "Failed to submit draw command buffer!");
 	}
 
 	GraphicsCommandBuffer::GraphicsCommandBuffer()
@@ -110,11 +111,6 @@ namespace Vulpine::Vulkan
 		}
 	}
 
-	void GraphicsCommandBuffer::Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore, const Semaphore* pSignalSemaphore)
-	{
-		CommandBuffer::Submit(commandBufferIndex, Device::GetGraphicsQueue(), pWaitSemaphore, pSignalSemaphore);
-	}
-
 	TransferCommandBuffer::TransferCommandBuffer()
 		: CommandBuffer(TransferCommandPool::GetPool(), 1)
 	{ }
@@ -137,6 +133,6 @@ namespace Vulpine::Vulkan
 
 	void TransferCommandBuffer::Submit(const Semaphore* pWaitSemaphore, const Semaphore* pSignalSemaphore)
 	{
-		CommandBuffer::Submit(0, Device::GetTransferQueue(), pWaitSemaphore, pSignalSemaphore);
+		CommandBuffer::Submit(0, pWaitSemaphore, pSignalSemaphore);
 	}
 }
