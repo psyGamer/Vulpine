@@ -14,6 +14,11 @@ namespace Vulpine::Vulkan
 		VertexBuffer();
 		VertexBuffer(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount);
 
+		VertexBuffer(VertexBuffer&& other) noexcept;
+		VertexBuffer(const VertexBuffer& other) noexcept;
+		VertexBuffer& operator=(VertexBuffer&& other) noexcept;
+		VertexBuffer& operator=(const VertexBuffer& other) noexcept;
+
 		void SetData(const void* const data);
 		void SetLayout(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount);
 

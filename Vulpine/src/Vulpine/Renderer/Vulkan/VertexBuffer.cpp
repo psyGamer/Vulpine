@@ -12,6 +12,36 @@ namespace Vulpine::Vulkan
 		SetLayout(vertexAttributes, vertexCount);
 	}
 
+	VertexBuffer::VertexBuffer(VertexBuffer&& other)
+		: m_pBuffer(std::exchange(other.m_pBuffer, nullptr)),
+		m_VertexCount(std::move(other.m_VertexCount)),
+		m_VertexAttributes(std::move(other.m_VertexAttributes))
+	{}
+
+	VertexBuffer::VertexBuffer(const VertexBuffer& other)
+		: m_pBuffer(other.m_pBuffer),
+		m_VertexCount(other.m_VertexCount),
+		m_VertexAttributes(other.m_VertexAttributes)
+	{}
+
+	VertexBuffer& VertexBuffer::operator=(VertexBuffer&& other) noexcept
+	{
+		this->~VertexBuffer();
+
+		m_pBuffer = std::exchange(other.m_pBuffer, nullptr);
+		m_VertexCount = std::move(other.m_VertexCount);
+		m_VertexAttributes = std::move(other.m_VertexAttributes);
+	}
+
+	VertexBuffer& VertexBuffer::operator=(const VertexBuffer& other) noexcept
+	{
+		this->~VertexBuffer();
+
+		m_pBuffer = other.m_pBuffer;
+		m_VertexCount = other.m_VertexCount;
+		m_VertexAttributes = other.m_VertexAttributes;
+	}
+
 	void VertexBuffer::SetLayout(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount)
 	{
 		m_VertexAttributes = vertexAttributes;

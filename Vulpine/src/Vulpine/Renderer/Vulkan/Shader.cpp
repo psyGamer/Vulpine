@@ -47,6 +47,32 @@ namespace Vulpine::Vulkan
 		Destroy();
 	}
 
+	Shader::Shader(Shader&& other)
+		: m_ShaderModule(std::exchange(other.m_ShaderModule, VK_NULL_HANDLE)),
+		m_ShaderStageInfo(std::move(other.m_ShaderStageInfo))
+	{ }
+
+	Shader::Shader(const Shader& other)
+		: m_ShaderModule(other.m_ShaderModule),
+		m_ShaderStageInfo(other.m_ShaderStageInfo),
+	{ }
+
+	Shader& Shader::operator=(Shader&& other) noexcept
+	{
+		this->~Shader();
+
+		m_ShaderModule = std::exchange(other.m_ShaderModule, VK_NULL_HANDLE);
+		m_ShaderStageInfo = std::move(other.m_ShaderStageInfo);
+	}
+
+	Shader& Shader::operator=(const Shader& other) noexcept
+	{
+		this->~Shader();
+
+		m_ShaderModule = other.m_ShaderModule;
+		m_ShaderStageInfo = other.m_ShaderStageInfo;
+	}
+
 	void Shader::Destroy()
 	{
 		vkDestroyShaderModule(Device::GetLogicalDevice(), m_ShaderModule, nullptr);

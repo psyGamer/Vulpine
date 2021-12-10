@@ -15,6 +15,11 @@ namespace Vulpine::Vulkan
 		Shader(const std::string& filePath, Shader::Type type, const std::string& entryPoint = "main");
 		~Shader();
 
+		Shader(Shader&& other) noexcept;
+		Shader(const Shader& other) noexcept;
+		Shader& operator=(Shader&& other) noexcept;
+		Shader& operator=(const Shader& other) noexcept;
+
 		void Destroy();
 
 		inline VkShaderModule GetShaderModule() const { return m_ShaderModule; }

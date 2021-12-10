@@ -33,6 +33,32 @@ namespace Vulpine::Vulkan
 		vkFreeCommandBuffers(Device::GetLogicalDevice(), m_pCommandPool->GetPool(), m_CommandBuffers.size(), m_CommandBuffers.data());
 	}
 
+	CommandBuffer::CommandBuffer(CommandBuffer&& other)
+		: m_pCommandPool(std::exchange(other.m_pCommandPool, nullptr)),
+		m_CommandBuffers(std::move(other.m_CommandBuffers))
+	{ }
+
+	CommandBuffer::CommandBuffer(const CommandBuffer& other)
+		: m_pCommandPool(other.m_pCommandPool),
+		m_CommandBuffers(other.m_CommandBuffers)
+	{ }
+
+	CommandBuffer& CommandBuffer::operator=(CommandBuffer&& other) noexcept
+	{
+		this->~CommandBuffer();
+
+		m_pCommandPool = std::exchange(other.m_pCommandPool, nullptr);
+		m_CommandBuffers = std::move(other.m_CommandBuffers);
+	}
+
+	CommandBuffer& CommandBuffer::operator=(const CommandBuffer& other) noexcept
+	{
+		this->~CommandBuffer();
+
+		m_pCommandPool = other.m_pCommandPool;
+		m_CommandBuffers = other.m_CommandBuffers;
+	}
+
 	void CommandBuffer::Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore, const Semaphore* pSignalSemaphore)
 	{
 		VkSubmitInfo submitInfo{};

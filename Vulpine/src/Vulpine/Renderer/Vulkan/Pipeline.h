@@ -16,6 +16,11 @@ namespace Vulpine::Vulkan
 		Pipeline(Shader vertexShader, Shader fragmentShader);
 		~Pipeline();
 
+		Pipeline(Pipeline&& other) = delete;
+		Pipeline(const Pipeline& other) = delete;
+		Pipeline& operator=(Pipeline&& other) = delete;
+		Pipeline& operator=(const Pipeline& other) = delete;
+
 		void Create();
 		void Destroy();
 

@@ -107,6 +107,32 @@ namespace Vulpine::Vulkan
 		}
 	}
 
+	UniformBuffer::UniformBuffer(UniformBuffer&& other)
+		: m_pBuffers(std::move(other.m_pBuffers)),
+		m_pSets(std::move(other.m_pSets))
+	{}
+
+	UniformBuffer::UniformBuffer(const UniformBuffer& other)
+		: m_pBuffers(other.m_pBuffers),
+		m_pSets(other.m_pSets)
+	{}
+
+	UniformBuffer& UniformBuffer::operator=(UniformBuffer&& other) noexcept
+	{
+		this->~UniformBuffer();
+
+		m_pBuffers = std::move(other.m_pBuffers);
+		m_pSets = std::move(other.m_pSets);
+	}
+
+	UniformBuffer& UniformBuffer::operator=(const UniformBuffer& other) noexcept
+	{
+		this->~UniformBuffer();
+
+		m_pBuffers = other.m_pBuffers;
+		m_pSets = other.m_pSets;
+	}
+
 	void UniformBuffer::SetData(const void* const data)
 	{
 		// TODO Only set the data to the uniform buffer for the current framebuffer

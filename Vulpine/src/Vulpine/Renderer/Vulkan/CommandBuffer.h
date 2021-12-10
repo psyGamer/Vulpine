@@ -15,6 +15,11 @@ namespace Vulpine::Vulkan
 		CommandBuffer(std::shared_ptr<const CommandPool> pCommandPool, uint32_t commandBufferCount);
 		~CommandBuffer();
 		
+		CommandBuffer(CommandBuffer&& other) noexcept;
+		CommandBuffer(const CommandBuffer& other) noexcept;
+		CommandBuffer& operator=(CommandBuffer&& other) noexcept;
+		CommandBuffer& operator=(const CommandBuffer& other) noexcept;
+
 		void Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore = nullptr, const Semaphore* pSignalSemaphore = nullptr);
 
 		inline const std::vector<VkCommandBuffer>& GetCommandBuffers() const { return m_CommandBuffers; }

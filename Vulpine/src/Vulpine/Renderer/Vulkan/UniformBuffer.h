@@ -46,6 +46,11 @@ namespace Vulpine::Vulkan
 	public:
 		UniformBuffer(size_t bufferSize);
 
+		UniformBuffer(UniformBuffer&& other) noexcept;
+		UniformBuffer(const UniformBuffer& other) noexcept;
+		UniformBuffer& operator=(UniformBuffer&& other) noexcept;
+		UniformBuffer& operator=(const UniformBuffer& other) noexcept;
+
 		void SetData(const void* const data);
 
 		inline const std::vector<std::shared_ptr<Buffer>>& GetBuffers() const { return m_pBuffers; }

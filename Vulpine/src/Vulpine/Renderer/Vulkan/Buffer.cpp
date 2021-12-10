@@ -43,6 +43,38 @@ namespace Vulpine::Vulkan
 		vkFreeMemory(Device::GetLogicalDevice(), m_BufferMemory, nullptr);
 	}
 
+	Buffer::Buffer(Buffer&& other)
+		: m_Buffer(std::exchange(other.m_Buffer, VK_NULL_HANDLE)),
+		m_BufferMemory(std::exchange(other.m_BufferMemory, VK_NULL_HANDLE)),
+		m_BufferSize(std::move(other.m_BufferSize))
+	{ }
+
+	Buffer::Buffer(const Buffer& other)
+		: m_Buffer(other.m_Buffer),
+		m_BufferMemory(other.m_BufferMemory),
+		m_BufferSize(other.m_BufferSize)
+	{ }
+
+	Buffer& Buffer::operator=(Buffer&& other) noexcept
+	{
+		this->~Buffer();
+
+		m_Buffer = std::exchange(other.m_Buffer, VK_NULL_HANDLE);
+		m_BufferMemory = std::exchange(other.m_Buffer, VK_NULL_HANDLE);
+
+		m_BufferSize = std::move(other.m_BufferSize);
+	}
+
+	Buffer& Buffer::operator=(const Buffer& other) noexcept
+	{
+		this->~Buffer();
+
+		m_Buffer = other.m_Buffer;
+		m_BufferMemory = other.m_BufferMemory;
+
+		m_BufferSize = other.m_BufferSize;
+	}
+
 	void Buffer::Copy(const Buffer& source, const Buffer& destination)
 	{
 		TransferCommandBuffer commandBuffer;
