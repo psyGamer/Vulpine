@@ -11,7 +11,11 @@ project "Vulpine"
 	targetdir("../Bin/" .. outputdir .. "/%{prj.name}")
 	objdir("../Bin/temp/" .. outputdir .. "/%{prj.name}")
 		
-	dependson "GLFW"
+	dependson
+	{
+		"GLFW",
+		"benchmark"
+	}
 		
 	includedirs 
 	{
