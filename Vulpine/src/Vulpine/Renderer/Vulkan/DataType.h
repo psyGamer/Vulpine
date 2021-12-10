@@ -43,6 +43,9 @@ namespace Vulpine::Vulkan
 	public:
 		static uint32_t QueryDataTypeSize(DataType dataType);
 		static VkFormat QueryDataTypeFormat(DataType dataType);
+
+	private:
+		DataTypeHelper();
 	};
 }
 

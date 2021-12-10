@@ -38,6 +38,8 @@ namespace Vulpine::Vulkan
 		inline static VkQueue GetTransferQueue() { return s_TransferQueue; }
 
 	private:
+		Device();
+
 		static PhysicalDeviceInfo ChoseOptimalPhysicalDevice(const VkInstance& instance);
 		static PhysicalDeviceInfo QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice);
 		static uint32_t RatePhysicalDevice(const PhysicalDeviceInfo& physicalDeviceInfo);

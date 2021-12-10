@@ -33,6 +33,8 @@ namespace Vulpine::Vulkan
 			std::vector<VkPresentModeKHR> supportedPresentModes;
 		};
 
+		Swapchain();
+
 		static void SetupSwapchain();
 		static void SetupImageViews();
 		static void SetupFramebuffers();

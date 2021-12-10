@@ -15,6 +15,9 @@ namespace Vulpine::Vulkan
 		inline static VkRenderPass GetRenderPass() { return s_RenderPass; }
 
 	private:
+		RenderPass();
+
+	private:
 		static VkRenderPass s_RenderPass;
 	};
 }

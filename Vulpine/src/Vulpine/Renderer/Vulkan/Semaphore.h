@@ -15,6 +15,9 @@ namespace Vulpine::Vulkan
 		inline VkSemaphore GetSemaphore() const { return m_Semaphore; }
 
 	private:
+		Semaphore();
+
+	private:
 		VkSemaphore m_Semaphore;
 	};
 }

@@ -32,6 +32,9 @@ namespace Vulpine::Vulkan
 		inline static std::shared_ptr<const CommandPool> GetPool() { return s_pCommandPool; }
 
 	private:
+		GraphicsCommandPool();
+
+	private:
 		static std::shared_ptr<CommandPool> s_pCommandPool;
 	};
 
@@ -42,6 +45,9 @@ namespace Vulpine::Vulkan
 		static void Destroy() { s_pCommandPool->~CommandPool(); }
 
 		inline static std::shared_ptr<const CommandPool> GetPool() { return s_pCommandPool; }
+
+	private:
+		TransferCommandPool();
 
 	private:
 		static std::shared_ptr<CommandPool> s_pCommandPool;
