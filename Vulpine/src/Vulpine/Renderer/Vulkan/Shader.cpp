@@ -7,17 +7,16 @@
 
 namespace Vulpine::Vulkan
 {
-	Shader::Shader(Shader::Type type, const std::string& entryPoint)
+	Shader::Shader(const std::string& filePath, Shader::Type type, const std::string& entryPoint)
 	{
+		VP_ASSERT(filePath.empty(), "Shader file path can't be an empty string!");
 		VP_ASSERT(entryPoint.empty(), "Shader entrypoint can't be an empty string!");
 
 		m_ShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		m_ShaderStageInfo.pNext = nullptr;
 		m_ShaderStageInfo.flags = 0;
-		
-		m_EntryPoint = entryPoint;
 
-		m_ShaderStageInfo.pName = m_EntryPoint.c_str();
+		m_ShaderStageInfo.pName = entryPoint.c_str();
 		m_ShaderStageInfo.pSpecializationInfo = nullptr;
 
 		switch (type)
@@ -30,29 +29,7 @@ namespace Vulpine::Vulkan
 			break;
 		}
 
-		m_ShaderModule = VK_NULL_HANDLE;
-	}
-
-	Shader::Shader(const std::string& filePath, Shader::Type type, const std::string& entryPoint)
-		:Shader(type, entryPoint)
-	{
-		Load(filePath);
-	}
-
-	Shader::~Shader()
-	{
-		Destroy();
-	}
-
-	void Shader::Load(const std::string& filePath)
-	{
-		if (m_ShaderModule != VK_NULL_HANDLE)
-			return;
-
-		VP_ASSERT(filePath.empty(), "Shader file path can't be an empty string!");
-
-		std::vector<char> shaderCode;
-		FileUtil::ReadFile(filePath, shaderCode);
+		std::vector<char> shaderCode = FileUtil::ReadFile(filePath);
 
 		VkShaderModuleCreateInfo shaderCreateInfo{};
 		shaderCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -63,6 +40,37 @@ namespace Vulpine::Vulkan
 		VP_ASSERT_VK(vkCreateShaderModule(Device::GetLogicalDevice(), &shaderCreateInfo, nullptr, &m_ShaderModule), "Failed to create shader module!");
 
 		m_ShaderStageInfo.module = m_ShaderModule;
+	}
+
+	Shader::~Shader()
+	{
+		Destroy();
+	}
+
+	Shader::Shader(Shader&& other)
+		: m_ShaderModule(std::exchange(other.m_ShaderModule, VK_NULL_HANDLE)),
+		m_ShaderStageInfo(std::move(other.m_ShaderStageInfo))
+	{ }
+
+	Shader::Shader(const Shader& other)
+		: m_ShaderModule(other.m_ShaderModule),
+		m_ShaderStageInfo(other.m_ShaderStageInfo),
+	{ }
+
+	Shader& Shader::operator=(Shader&& other) noexcept
+	{
+		this->~Shader();
+
+		m_ShaderModule = std::exchange(other.m_ShaderModule, VK_NULL_HANDLE);
+		m_ShaderStageInfo = std::move(other.m_ShaderStageInfo);
+	}
+
+	Shader& Shader::operator=(const Shader& other) noexcept
+	{
+		this->~Shader();
+
+		m_ShaderModule = other.m_ShaderModule;
+		m_ShaderStageInfo = other.m_ShaderStageInfo;
 	}
 
 	void Shader::Destroy()

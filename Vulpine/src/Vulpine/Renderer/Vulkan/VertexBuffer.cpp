@@ -12,6 +12,36 @@ namespace Vulpine::Vulkan
 		SetLayout(vertexAttributes, vertexCount);
 	}
 
+	VertexBuffer::VertexBuffer(VertexBuffer&& other)
+		: m_pBuffer(std::exchange(other.m_pBuffer, nullptr)),
+		m_VertexCount(std::move(other.m_VertexCount)),
+		m_VertexAttributes(std::move(other.m_VertexAttributes))
+	{}
+
+	VertexBuffer::VertexBuffer(const VertexBuffer& other)
+		: m_pBuffer(other.m_pBuffer),
+		m_VertexCount(other.m_VertexCount),
+		m_VertexAttributes(other.m_VertexAttributes)
+	{}
+
+	VertexBuffer& VertexBuffer::operator=(VertexBuffer&& other) noexcept
+	{
+		this->~VertexBuffer();
+
+		m_pBuffer = std::exchange(other.m_pBuffer, nullptr);
+		m_VertexCount = std::move(other.m_VertexCount);
+		m_VertexAttributes = std::move(other.m_VertexAttributes);
+	}
+
+	VertexBuffer& VertexBuffer::operator=(const VertexBuffer& other) noexcept
+	{
+		this->~VertexBuffer();
+
+		m_pBuffer = other.m_pBuffer;
+		m_VertexCount = other.m_VertexCount;
+		m_VertexAttributes = other.m_VertexAttributes;
+	}
+
 	void VertexBuffer::SetLayout(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount)
 	{
 		m_VertexAttributes = vertexAttributes;
@@ -22,7 +52,7 @@ namespace Vulpine::Vulkan
 			size += DataTypeHelper::QueryDataTypeSize(vertexAttribute);
 		size *= vertexCount;
 
-		m_pBuffer = CreateReference<GpuBuffer>(size,
+		m_pBuffer = std::make_shared<GpuBuffer>(size,
 			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 		);
@@ -50,15 +80,16 @@ namespace Vulpine::Vulkan
 		return bindingDescription;
 	}
 
-	void VertexBuffer::QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionsBuffer) const
+	std::vector<VkVertexInputAttributeDescription> VertexBuffer::QueryAttributeDescriptions(uint32_t bindingIndex) const
 	{
 		uint32_t location = 0, offset = 0;
 
-		attributeDescriptionsBuffer->reserve(m_VertexAttributes.size());
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+		attributeDescriptions.reserve(m_VertexAttributes.size());
 
 		for (const auto& vertexAttribute : m_VertexAttributes)
 		{
-			VkVertexInputAttributeDescription& attributeDescription = attributeDescriptionsBuffer->emplace_back();
+			VkVertexInputAttributeDescription& attributeDescription = attributeDescriptions.emplace_back();
 			attributeDescription.binding = bindingIndex;
 			attributeDescription.location = location++;
 			attributeDescription.format = DataTypeHelper::QueryDataTypeFormat(vertexAttribute);
@@ -66,5 +97,7 @@ namespace Vulpine::Vulkan
 
 			offset += DataTypeHelper::QueryDataTypeSize(vertexAttribute);
 		}
+
+		return std::move(attributeDescriptions);
 	}
 }

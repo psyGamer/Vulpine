@@ -10,14 +10,19 @@ namespace Vulpine::Vulkan
 		IndexBuffer();
 		IndexBuffer(uint32_t vertexCount);
 
+		IndexBuffer(IndexBuffer&& other) noexcept;
+		IndexBuffer(const IndexBuffer& other) noexcept;
+		IndexBuffer& operator=(IndexBuffer&& other) noexcept;
+		IndexBuffer& operator=(const IndexBuffer& other) noexcept;
+
 		void SetData(const void* const data);
 		void SetIndexCount(uint32_t indexCount);
 
-		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+		inline VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+		inline uint32_t GetIndexCount() const { return m_IndexCount; }
 
-		uint32_t GetIndexCount() const { return m_IndexCount; }
 	private:
-		Reference<Buffer> m_pBuffer;
+		std::shared_ptr<Buffer> m_pBuffer;
 
 		uint32_t m_IndexCount;
 	};

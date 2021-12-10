@@ -19,5 +19,4 @@
 #include <glm/gtx/hash.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Core/Base.h"
-
+#include "Core/Assert.h"

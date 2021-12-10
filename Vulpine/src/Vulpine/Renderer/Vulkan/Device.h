@@ -6,8 +6,6 @@
 
 namespace Vulpine::Vulkan
 {
-	class Instance;
-
 	class Device
 	{
 	public:
@@ -21,23 +19,28 @@ namespace Vulpine::Vulkan
 
 			bool QueueIndicesFound() const
 			{
-				return GraphicsQueueIndex.has_value() && PresentQueueIndex.has_value() && TransferQueueIndex.has_value();
+				return GraphicsQueueIndex.has_value() &&
+					PresentQueueIndex.has_value() &&
+					TransferQueueIndex.has_value();
 			}
 		};
 
-		static void Create(const VkInstance& instance);
+	public:
+		static void Create(VkInstance instance);
 		static void Destory();
 
-		static const PhysicalDeviceInfo& GetPhysicalDeviceInfo() { return s_PhysicalDeviceInfo; }
+		inline static const PhysicalDeviceInfo& GetPhysicalDeviceInfo() { return s_PhysicalDeviceInfo; }
 
-		static const VkDevice& GetLogicalDevice() { return s_LogicalDevice; }
-		static const VkPhysicalDevice& GetPhysicalDevice() { return s_PhysicalDevice; }
+		inline static VkDevice GetLogicalDevice() { return s_LogicalDevice; }
+		inline static VkPhysicalDevice GetPhysicalDevice() { return s_PhysicalDevice; }
 
-		static const VkQueue& GetGraphicsQueue() { return s_GraphicsQueue; }
-		static const VkQueue& GetPresentQueue() { return s_PresentQueue; }
-		static const VkQueue& GetTransferQueue() { return s_TransferQueue; }
+		inline static VkQueue GetGraphicsQueue() { return s_GraphicsQueue; }
+		inline static VkQueue GetPresentQueue() { return s_PresentQueue; }
+		inline static VkQueue GetTransferQueue() { return s_TransferQueue; }
 
 	private:
+		Device();
+
 		static PhysicalDeviceInfo ChoseOptimalPhysicalDevice(const VkInstance& instance);
 		static PhysicalDeviceInfo QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice);
 		static uint32_t RatePhysicalDevice(const PhysicalDeviceInfo& physicalDeviceInfo);

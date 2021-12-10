@@ -12,7 +12,7 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destroy();
 
-		static VkDescriptorPool GetPool() { return s_Pool; }
+		inline static VkDescriptorPool GetPool() { return s_Pool; }
 
 	private:
 		static VkDescriptorPool s_Pool;
@@ -24,7 +24,7 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destroy();
 
-		static VkDescriptorSetLayout GetSetLayout() { return s_SetLayout; }
+		inline static VkDescriptorSetLayout GetSetLayout() { return s_SetLayout; }
 
 	private:
 		static VkDescriptorSetLayout s_SetLayout;
@@ -35,7 +35,7 @@ namespace Vulpine::Vulkan
 	public:
 		static void Create(const std::vector<VkDescriptorSetLayout>& layouts);
 
-		static std::vector<VkDescriptorSet> GetSets() { return s_Sets; }
+		inline static std::vector<VkDescriptorSet> GetSets() { return s_Sets; }
 
 	private:
 		static std::vector<VkDescriptorSet> s_Sets;
@@ -46,13 +46,18 @@ namespace Vulpine::Vulkan
 	public:
 		UniformBuffer(size_t bufferSize);
 
+		UniformBuffer(UniformBuffer&& other) noexcept;
+		UniformBuffer(const UniformBuffer& other) noexcept;
+		UniformBuffer& operator=(UniformBuffer&& other) noexcept;
+		UniformBuffer& operator=(const UniformBuffer& other) noexcept;
+
 		void SetData(const void* const data);
 
-		std::vector<Reference<Buffer>> GetBuffers() const { return m_pBuffers; }
-		std::vector<VkDescriptorSet> GetSets() const { return m_pSets; }
+		inline const std::vector<std::shared_ptr<Buffer>>& GetBuffers() const { return m_pBuffers; }
+		inline const std::vector<VkDescriptorSet>& GetSets() const { return m_pSets; }
 
 	private:
-		std::vector<Reference<Buffer>> m_pBuffers;
+		std::vector<std::shared_ptr<Buffer>> m_pBuffers;
 		std::vector<VkDescriptorSet> m_pSets;
 	};
 }

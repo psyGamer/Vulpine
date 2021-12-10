@@ -6,10 +6,6 @@ pushd benchmark
 git pull origin main
 popd
 
-pushd spdlog
-git pull origin v1.x
-popd
-
 pushd glfw
 git pull origin master
 popd

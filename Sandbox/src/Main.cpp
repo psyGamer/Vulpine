@@ -16,6 +16,8 @@
 
 #include "Vulpine/Vulpine.h"
 #include "Vulpine/Core/Window.h"
+#include "Vulpine/Core/Log.h"
+#include "Vulpine/Core/Assert.h"
 
 // Use windowed app if it's in the Dist configuration
 #ifdef VP_DIST
@@ -105,13 +107,15 @@ void MAIN()
 		vertShader.Destroy();
 		fragShader.Destroy();
 
-		CommandPool::Create();
-		CommandBuffers::Create();
+		GraphicsCommandPool::Create();
+		TransferCommandPool::Create();
+
+		GraphicsCommandBuffer commandBuffer;
 
 		vertBuffer.SetData(&positions);
 		indexBuffer.SetData(&indices);
 
-		CommandBuffers::Record(pipeline);
+		commandBuffer.Record(pipeline);
 
 		Semaphore imageAvailableSemaphore;
 		Semaphore renderFinishedSemaphore;
@@ -169,7 +173,7 @@ void MAIN()
 			glfwPollEvents();
 
 			uint32_t imageIndex = Swapchain::AcquireNextImageIndex(imageAvailableSemaphore);
-			CommandBuffers::Submit(imageIndex, imageAvailableSemaphore, renderFinishedSemaphore);
+			commandBuffer.Submit(imageIndex, &imageAvailableSemaphore, &renderFinishedSemaphore);
 
 			VkPresentInfoKHR presentInfo{};
 			presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -195,9 +199,10 @@ void MAIN()
 		imageAvailableSemaphore.Destroy();
 		renderFinishedSemaphore.Destroy();
 
-		CommandBuffers::Destroy();
+		commandBuffer.~GraphicsCommandBuffer();
 		DescriptorPool::Destroy();
-		CommandPool::Destroy();
+		GraphicsCommandPool::Destroy();
+		TransferCommandPool::Destroy();
 
 		pipeline.Destroy();
 	}

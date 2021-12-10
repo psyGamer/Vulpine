@@ -13,6 +13,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
 	include "Vulpine/vendor/GLFW"
+	include "Vulpine/vendor/benchmark"
 group ""
 
 include "Vulpine"

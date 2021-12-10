@@ -10,23 +10,23 @@ namespace Vulpine
 	class Window
 	{
 	public:
-		static void Create(const std::string& windowTitle, uint32_t width, uint32_t height);
+		static void Create(std::string windowTitle, uint32_t width, uint32_t height);
 		static void Destroy();
 
-		static void CreateSurface(const VkInstance& instance);
-		static void DestroySurface(const VkInstance& instance);
+		static void CreateSurface(VkInstance instance);
+		static void DestroySurface(VkInstance instance);
 
 		static VkExtent2D QueryFramebufferSize();
 
-		static void SetWindowTitle(const std::string& windowTitle);
+		static void SetWindowTitle(std::string windowTitle);
 
 		static GLFWwindow* const GetWindow() { return s_Window; }
-		static const std::string& const GetWindowTitle() { return s_WindowTitle; }
+		static std::string const GetWindowTitle() { return s_WindowTitle; }
 
 		static uint32_t GetWidth() { return s_Width; }
 		static uint32_t GetHeight() { return s_Height; }
 
-		static VkSurfaceKHR& GetSurface() { return s_Surface; }
+		static VkSurfaceKHR GetSurface() { return s_Surface; }
 
 	private:
 		static void OnWindowResize(GLFWwindow* window, int width, int height);

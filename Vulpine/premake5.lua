@@ -11,7 +11,11 @@ project "Vulpine"
 	targetdir("../Bin/" .. outputdir .. "/%{prj.name}")
 	objdir("../Bin/temp/" .. outputdir .. "/%{prj.name}")
 		
-	dependson "GLFW"
+	dependson
+	{
+		"GLFW",
+		"benchmark"
+	}
 		
 	includedirs 
 	{
@@ -45,12 +49,12 @@ project "Vulpine"
 	}
 	
 	filter "configurations:Debug"
-		defines "VP_DEBUG"
+		defines { "VP_DEBUG", "VP_VULKAN_VALIDATION" }
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "VP_RELEASE"
+		defines { "VP_RELEASE", "VP_VULKAN_VALIDATION" }
 		runtime "Release"
 		optimize "on"
 		

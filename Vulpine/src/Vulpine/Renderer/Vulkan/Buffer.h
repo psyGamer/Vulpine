@@ -10,6 +10,11 @@ namespace Vulpine::Vulkan
 		Buffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags);
 		~Buffer();
 
+		Buffer(Buffer&& other) noexcept;
+		Buffer(const Buffer& other) noexcept;
+		Buffer& operator=(Buffer&& other) noexcept;
+		Buffer& operator=(const Buffer& other) noexcept;
+
 		virtual void SetData(const void* const data) = 0;
 
 		static void Copy(const Buffer& source, const Buffer& destination);
@@ -17,21 +22,24 @@ namespace Vulpine::Vulkan
 		inline void CopyFrom(const Buffer& source) { Copy(source, *this); }
 		inline void CopyTo(const Buffer& target) { Copy(*this, target); }
 
-		VkBuffer GetBuffer() const { return m_Buffer; }
-		VkDeviceMemory GetBufferMemory() const { return m_BufferMemory; }
+		inline VkBuffer GetBuffer() const { return m_Buffer; }
+		inline VkDeviceMemory GetBufferMemory() const { return m_BufferMemory; }
+
 	private:
 		static uint32_t FindMemoryTypeIndex(uint32_t supportedTypesBitmask, VkMemoryPropertyFlags requiredTypes);
 
-	public:
-		VkDeviceSize m_BufferSize;
-
+	protected:
 		VkBuffer m_Buffer;
 		VkDeviceMemory m_BufferMemory;
+
+		VkDeviceSize m_BufferSize;
+
 	};
 
 	class CpuBuffer : public Buffer
 	{
 	public:
+		CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags);
 		CpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags);
 
 		void SetData(const void* const data) override;
@@ -40,6 +48,7 @@ namespace Vulpine::Vulkan
 	class GpuBuffer : public Buffer
 	{
 	public:
+		GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags);
 		GpuBuffer(size_t bufferSize, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryFlags);
 
 		void SetData(const void* const data) override;

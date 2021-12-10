@@ -8,8 +8,8 @@
 
 namespace Vulpine::Vulkan
 {
-	Pipeline::Pipeline(const Shader& vertexShader, const Shader& fragmentShader)
-		: m_VertexShader(vertexShader), m_FragmentShader(fragmentShader)
+	Pipeline::Pipeline(Shader vertexShader, Shader fragmentShader)
+		: m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader))
 	{
 		m_Pipeline = VK_NULL_HANDLE;
 		m_PipelineLayout = VK_NULL_HANDLE;
@@ -34,8 +34,7 @@ namespace Vulpine::Vulkan
 		
 		// Vertex Input
 		auto bindingDescription = m_pVertexBuffer->QueryBindingDescriptions(0);
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-		m_pVertexBuffer->QueryAttributeDescriptions(0, &attributeDescriptions);
+		auto attributeDescriptions = m_pVertexBuffer->QueryAttributeDescriptions(0);
 
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -174,17 +173,17 @@ namespace Vulpine::Vulkan
 
 	void Pipeline::SetVertexBuffer(const VertexBuffer& vertexBuffer)
 	{
-		m_pVertexBuffer = Reference<const VertexBuffer>(&vertexBuffer);
+		m_pVertexBuffer = std::shared_ptr<const VertexBuffer>(&vertexBuffer);
 	}
 
 	void Pipeline::SetIndexBuffer(const IndexBuffer& indexBuffer)
 	{
-		m_pIndexBuffer = Reference<const IndexBuffer>(&indexBuffer);
+		m_pIndexBuffer = std::shared_ptr<const IndexBuffer>(&indexBuffer);
 	}
 
 	void Pipeline::SetUniformBuffer(const UniformBuffer& uniformBuffer)
 	{
-		m_pUniformBuffer = Reference<const UniformBuffer>(&uniformBuffer);
+		m_pUniformBuffer = std::shared_ptr<const UniformBuffer>(&uniformBuffer);
 	}
 
 	void Pipeline::ResetViewport()

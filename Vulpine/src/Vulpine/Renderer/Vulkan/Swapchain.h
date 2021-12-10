@@ -15,14 +15,14 @@ namespace Vulpine::Vulkan
 
 		static uint32_t AcquireNextImageIndex(const Semaphore& semaphore);
 
-		static const VkSwapchainKHR& GetSwapchain() { return s_Swapchain; }
+		inline static const VkSwapchainKHR& GetSwapchain() { return s_Swapchain; }
 
-		static const std::vector<VkImage>& GetImages() { return s_Images; }
-		static const std::vector<VkImageView>& GetImageViews() { return s_ImageViews; }
-		static const std::vector<VkFramebuffer>& GetFramebuffers() { return s_Framebuffers; }
+		inline static const std::vector<VkImage>& GetImages() { return s_Images; }
+		inline static const std::vector<VkImageView>& GetImageViews() { return s_ImageViews; }
+		inline static const std::vector<VkFramebuffer>& GetFramebuffers() { return s_Framebuffers; }
 
-		static const VkExtent2D& GetFramebufferSize() { return s_FramebufferSize; }
-		static const VkFormat& GetImageFormat() { return s_ImageFormat; }
+		inline static VkExtent2D GetFramebufferSize() { return s_FramebufferSize; }
+		inline static VkFormat GetImageFormat() { return s_ImageFormat; }
 
 	private:
 		struct SwapchainSupportInfo
@@ -32,6 +32,9 @@ namespace Vulpine::Vulkan
 			std::vector<VkSurfaceFormatKHR> supportedSurfaceFormats;
 			std::vector<VkPresentModeKHR> supportedPresentModes;
 		};
+
+	private:
+		Swapchain();
 
 		static void SetupSwapchain();
 		static void SetupImageViews();

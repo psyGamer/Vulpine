@@ -10,9 +10,12 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destory();
 
-		static const VkInstance& GetInstance() { return s_Instance; }
+		inline static VkInstance GetInstance() { return s_Instance; }
+
 	private:
 		Instance();
+
+		static std::vector<const char*> QueryRequiredExtensions();
 
 	private:
 		static VkInstance s_Instance;

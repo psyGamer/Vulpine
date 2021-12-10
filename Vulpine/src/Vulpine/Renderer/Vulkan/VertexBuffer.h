@@ -14,18 +14,23 @@ namespace Vulpine::Vulkan
 		VertexBuffer();
 		VertexBuffer(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount);
 
+		VertexBuffer(VertexBuffer&& other) noexcept;
+		VertexBuffer(const VertexBuffer& other) noexcept;
+		VertexBuffer& operator=(VertexBuffer&& other) noexcept;
+		VertexBuffer& operator=(const VertexBuffer& other) noexcept;
+
 		void SetData(const void* const data);
 		void SetLayout(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount);
 
-		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+		inline VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+		inline uint32_t GetVertexCount() const { return m_VertexCount; }
 
-		uint32_t GetVertexCount() const { return m_VertexCount; }
 	private:
 		VkVertexInputBindingDescription QueryBindingDescriptions(uint32_t bindingIndex) const;
-		void QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionBuffer) const;
+		std::vector<VkVertexInputAttributeDescription> QueryAttributeDescriptions(uint32_t bindingIndex) const;
 
 	public:
-		Reference<Buffer> m_pBuffer;
+		std::shared_ptr<Buffer> m_pBuffer;
 
 		uint32_t m_VertexCount;
 		std::vector<DataType> m_VertexAttributes;

@@ -82,7 +82,7 @@ namespace Vulpine::Vulkan
 
 		for (size_t i = 0; i < Swapchain::GetImages().size(); i++)
 		{
-			m_pBuffers[i] = CreateReference<CpuBuffer>(bufferSize,
+			m_pBuffers[i] = std::make_shared<CpuBuffer>(bufferSize,
 				VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
 				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
 			);
@@ -105,6 +105,32 @@ namespace Vulpine::Vulkan
 
 			vkUpdateDescriptorSets(Device::GetLogicalDevice(), 1, &descriptorWrite, 0, nullptr);
 		}
+	}
+
+	UniformBuffer::UniformBuffer(UniformBuffer&& other)
+		: m_pBuffers(std::move(other.m_pBuffers)),
+		m_pSets(std::move(other.m_pSets))
+	{}
+
+	UniformBuffer::UniformBuffer(const UniformBuffer& other)
+		: m_pBuffers(other.m_pBuffers),
+		m_pSets(other.m_pSets)
+	{}
+
+	UniformBuffer& UniformBuffer::operator=(UniformBuffer&& other) noexcept
+	{
+		this->~UniformBuffer();
+
+		m_pBuffers = std::move(other.m_pBuffers);
+		m_pSets = std::move(other.m_pSets);
+	}
+
+	UniformBuffer& UniformBuffer::operator=(const UniformBuffer& other) noexcept
+	{
+		this->~UniformBuffer();
+
+		m_pBuffers = other.m_pBuffers;
+		m_pSets = other.m_pSets;
 	}
 
 	void UniformBuffer::SetData(const void* const data)
