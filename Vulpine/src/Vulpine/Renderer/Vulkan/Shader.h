@@ -12,19 +12,15 @@ namespace Vulpine::Vulkan
 			VERTEX, FRAGMENT
 		};
 
-		Shader(Shader::Type type, std::string entryPoint = "main");
-		Shader(const std::string& filePath, Shader::Type type, std::string entryPoint = "main");
+		Shader(const std::string& filePath, Shader::Type type, const std::string& entryPoint = "main");
 		~Shader();
 
-		void Load(const std::string& filePath);
 		void Destroy();
 
 		inline VkShaderModule GetShaderModule() const { return m_ShaderModule; }
 		inline VkPipelineShaderStageCreateInfo GetShaderStageInfo() const { return m_ShaderStageInfo; }
 
 	private:
-		std::string m_EntryPoint;
-
 		VkShaderModule m_ShaderModule;
 		VkPipelineShaderStageCreateInfo m_ShaderStageInfo;
 	};
