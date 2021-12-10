@@ -10,8 +10,8 @@ namespace Vulpine::Vulkan
 		CommandPool(VkQueue queue, uint32_t queueIndex, VkCommandPoolCreateFlags flags = 0);
 		~CommandPool();
 
-		VkCommandPool GetPool() const { return m_CommandPool; }
-		VkQueue GetQueue() const { return m_Queue; }
+		inline VkCommandPool GetPool() const { return m_CommandPool; }
+		inline VkQueue GetQueue() const { return m_Queue; }
 
 	private:
 		VkCommandPool m_CommandPool;
@@ -24,7 +24,7 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destroy() { s_pCommandPool->~CommandPool(); }
 
-		static std::shared_ptr<const CommandPool> GetPool() { return s_pCommandPool; }
+		inline static std::shared_ptr<const CommandPool> GetPool() { return s_pCommandPool; }
 
 	private:
 		static std::shared_ptr<CommandPool> s_pCommandPool;
@@ -36,7 +36,7 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destroy() { s_pCommandPool->~CommandPool(); }
 
-		static std::shared_ptr<const CommandPool> GetPool() { return s_pCommandPool; }
+		inline static std::shared_ptr<const CommandPool> GetPool() { return s_pCommandPool; }
 
 	private:
 		static std::shared_ptr<CommandPool> s_pCommandPool;

@@ -12,7 +12,7 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destroy();
 
-		static VkRenderPass GetRenderPass() { return s_RenderPass; }
+		inline static VkRenderPass GetRenderPass() { return s_RenderPass; }
 
 	private:
 		static VkRenderPass s_RenderPass;

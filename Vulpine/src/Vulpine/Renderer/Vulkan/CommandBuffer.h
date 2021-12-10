@@ -17,7 +17,7 @@ namespace Vulpine::Vulkan
 		
 		void Submit(uint32_t commandBufferIndex, const Semaphore* pWaitSemaphore = nullptr, const Semaphore* pSignalSemaphore = nullptr);
 
-		const std::vector<VkCommandBuffer>& GetCommandBuffers() const { return m_CommandBuffers; }
+		inline const std::vector<VkCommandBuffer>& GetCommandBuffers() const { return m_CommandBuffers; }
 
 	protected:
 		std::vector<VkCommandBuffer> m_CommandBuffers;

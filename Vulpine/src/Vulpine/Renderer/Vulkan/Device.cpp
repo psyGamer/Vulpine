@@ -16,7 +16,7 @@ namespace Vulpine::Vulkan
 	VkQueue Device::s_PresentQueue = VK_NULL_HANDLE;
 	VkQueue Device::s_TransferQueue = VK_NULL_HANDLE;
 
-	void Device::Create(const VkInstance& instance)
+	void Device::Create(VkInstance instance)
 	{
 		s_PhysicalDeviceInfo = ChoseOptimalPhysicalDevice(instance);
 		s_PhysicalDevice = s_PhysicalDeviceInfo.PhysicalDevice;

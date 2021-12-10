@@ -17,8 +17,8 @@ namespace Vulpine::Vulkan
 		inline void CopyFrom(const Buffer& source) { Copy(source, *this); }
 		inline void CopyTo(const Buffer& target) { Copy(*this, target); }
 
-		VkBuffer GetBuffer() const { return m_Buffer; }
-		VkDeviceMemory GetBufferMemory() const { return m_BufferMemory; }
+		inline VkBuffer GetBuffer() const { return m_Buffer; }
+		inline VkDeviceMemory GetBufferMemory() const { return m_BufferMemory; }
 
 	private:
 		static uint32_t FindMemoryTypeIndex(uint32_t supportedTypesBitmask, VkMemoryPropertyFlags requiredTypes);

@@ -17,8 +17,8 @@ namespace Vulpine::Vulkan
 		void SetData(const void* const data);
 		void SetLayout(const std::initializer_list<DataType>& vertexAttributes, uint32_t vertexCount);
 
-		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
-		uint32_t GetVertexCount() const { return m_VertexCount; }
+		inline VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+		inline uint32_t GetVertexCount() const { return m_VertexCount; }
 
 	private:
 		VkVertexInputBindingDescription QueryBindingDescriptions(uint32_t bindingIndex) const;

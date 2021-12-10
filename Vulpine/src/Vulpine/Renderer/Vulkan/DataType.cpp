@@ -3,7 +3,7 @@
 
 namespace Vulpine::Vulkan
 {
-	uint32_t DataTypeHelper::QueryDataTypeSize(const DataType& vertexAttribute)
+	uint32_t DataTypeHelper::QueryDataTypeSize(DataType vertexAttribute)
 	{
 		switch (vertexAttribute)
 		{
@@ -85,7 +85,7 @@ namespace Vulpine::Vulkan
 		}
 	}
 
-	VkFormat DataTypeHelper::QueryDataTypeFormat(const DataType& dataType)
+	VkFormat DataTypeHelper::QueryDataTypeFormat(DataType dataType)
 	{
 		switch (dataType)
 		{

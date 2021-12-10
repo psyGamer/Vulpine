@@ -19,8 +19,8 @@ namespace Vulpine::Vulkan
 		void Load(const std::string& filePath);
 		void Destroy();
 
-		VkShaderModule GetShaderModule() const { return m_ShaderModule; }
-		VkPipelineShaderStageCreateInfo GetShaderStageInfo() const { return m_ShaderStageInfo; }
+		inline VkShaderModule GetShaderModule() const { return m_ShaderModule; }
+		inline VkPipelineShaderStageCreateInfo GetShaderStageInfo() const { return m_ShaderStageInfo; }
 
 	private:
 		std::string m_EntryPoint;

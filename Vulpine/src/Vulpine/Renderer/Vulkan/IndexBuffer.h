@@ -13,9 +13,8 @@ namespace Vulpine::Vulkan
 		void SetData(const void* const data);
 		void SetIndexCount(uint32_t indexCount);
 
-		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
-
-		uint32_t GetIndexCount() const { return m_IndexCount; }
+		inline VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
+		inline uint32_t GetIndexCount() const { return m_IndexCount; }
 
 	private:
 		std::shared_ptr<Buffer> m_pBuffer;
