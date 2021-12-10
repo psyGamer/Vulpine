@@ -50,15 +50,16 @@ namespace Vulpine::Vulkan
 		return bindingDescription;
 	}
 
-	void VertexBuffer::QueryAttributeDescriptions(uint32_t bindingIndex, std::vector<VkVertexInputAttributeDescription>* attributeDescriptionsBuffer) const
+	std::vector<VkVertexInputAttributeDescription> VertexBuffer::QueryAttributeDescriptions(uint32_t bindingIndex) const
 	{
 		uint32_t location = 0, offset = 0;
 
-		attributeDescriptionsBuffer->reserve(m_VertexAttributes.size());
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+		attributeDescriptions.reserve(m_VertexAttributes.size());
 
 		for (const auto& vertexAttribute : m_VertexAttributes)
 		{
-			VkVertexInputAttributeDescription& attributeDescription = attributeDescriptionsBuffer->emplace_back();
+			VkVertexInputAttributeDescription& attributeDescription = attributeDescriptions.emplace_back();
 			attributeDescription.binding = bindingIndex;
 			attributeDescription.location = location++;
 			attributeDescription.format = DataTypeHelper::QueryDataTypeFormat(vertexAttribute);
@@ -66,5 +67,7 @@ namespace Vulpine::Vulkan
 
 			offset += DataTypeHelper::QueryDataTypeSize(vertexAttribute);
 		}
+
+		return std::move(attributeDescriptions);
 	}
 }

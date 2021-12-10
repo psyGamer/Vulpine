@@ -16,6 +16,7 @@ namespace Vulpine::Vulkan
 		VkBuffer GetBuffer() const { return m_pBuffer->GetBuffer(); }
 
 		uint32_t GetIndexCount() const { return m_IndexCount; }
+
 	private:
 		std::shared_ptr<Buffer> m_pBuffer;
 

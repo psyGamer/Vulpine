@@ -11,6 +11,7 @@ namespace Vulpine::Vulkan
 		static void Destory();
 
 		static VkInstance GetInstance() { return s_Instance; }
+
 	private:
 		Instance();
 

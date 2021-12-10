@@ -7,15 +7,14 @@
 
 namespace Vulpine::Vulkan
 {
-	Shader::Shader(Shader::Type type, const std::string& entryPoint)
+	Shader::Shader(Shader::Type type, std::string entryPoint)
+		: m_EntryPoint(std::move(entryPoint))
 	{
 		VP_ASSERT(entryPoint.empty(), "Shader entrypoint can't be an empty string!");
 
 		m_ShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		m_ShaderStageInfo.pNext = nullptr;
 		m_ShaderStageInfo.flags = 0;
-		
-		m_EntryPoint = entryPoint;
 
 		m_ShaderStageInfo.pName = m_EntryPoint.c_str();
 		m_ShaderStageInfo.pSpecializationInfo = nullptr;
@@ -33,8 +32,8 @@ namespace Vulpine::Vulkan
 		m_ShaderModule = VK_NULL_HANDLE;
 	}
 
-	Shader::Shader(const std::string& filePath, Shader::Type type, const std::string& entryPoint)
-		:Shader(type, entryPoint)
+	Shader::Shader(const std::string& filePath, Shader::Type type, std::string entryPoint)
+		:Shader(type, std::move(entryPoint))
 	{
 		Load(filePath);
 	}

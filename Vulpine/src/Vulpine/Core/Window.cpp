@@ -10,7 +10,7 @@ namespace Vulpine
 
 	VkSurfaceKHR Window::s_Surface = VK_NULL_HANDLE;
 	
-	void Window::Create(const std::string& windowTitle, uint32_t width, uint32_t height)
+	void Window::Create(std::string windowTitle, uint32_t width, uint32_t height)
 	{
 		glfwInit();
 
@@ -18,7 +18,7 @@ namespace Vulpine
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
 		s_Window = glfwCreateWindow(width, height, windowTitle.c_str(), nullptr, nullptr);
-		s_WindowTitle = windowTitle;
+		s_WindowTitle = std::move(windowTitle);
 
 		glfwSetWindowSizeCallback(s_Window, OnWindowResize);
 
@@ -52,10 +52,10 @@ namespace Vulpine
 		};
 	}
 
-	void Window::SetWindowTitle(const std::string& windowTitle)
+	void Window::SetWindowTitle(std::string windowTitle)
 	{
 		glfwSetWindowTitle(s_Window, windowTitle.c_str());
-		s_WindowTitle = windowTitle;
+		s_WindowTitle = std::move(windowTitle);
 	}
 
 	void Window::OnWindowResize(GLFWwindow* window, int width, int height)

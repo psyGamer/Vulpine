@@ -13,7 +13,7 @@ namespace Vulpine::Vulkan
 	class Pipeline
 	{
 	public:
-		Pipeline(const Shader& vertexShader, const Shader& fragmentShader);
+		Pipeline(Shader vertexShader, Shader fragmentShader);
 		~Pipeline();
 
 		void Create();

@@ -21,6 +21,7 @@ namespace Vulpine::Vulkan
 
 	protected:
 		std::vector<VkCommandBuffer> m_CommandBuffers;
+
 	private:
 		std::shared_ptr<const CommandPool> m_pCommandPool;
 	};

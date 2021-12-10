@@ -25,7 +25,7 @@ namespace Vulpine::Vulkan
 			}
 		};
 
-		static void Create(const VkInstance& instance);
+		static void Create(VkInstance instance);
 		static void Destory();
 
 		static const PhysicalDeviceInfo& GetPhysicalDeviceInfo() { return s_PhysicalDeviceInfo; }
@@ -36,6 +36,7 @@ namespace Vulpine::Vulkan
 		static VkQueue GetGraphicsQueue() { return s_GraphicsQueue; }
 		static VkQueue GetPresentQueue() { return s_PresentQueue; }
 		static VkQueue GetTransferQueue() { return s_TransferQueue; }
+
 	private:
 		static PhysicalDeviceInfo ChoseOptimalPhysicalDevice(const VkInstance& instance);
 		static PhysicalDeviceInfo QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice);

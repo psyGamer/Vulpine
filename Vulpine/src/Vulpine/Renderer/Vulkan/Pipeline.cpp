@@ -8,8 +8,8 @@
 
 namespace Vulpine::Vulkan
 {
-	Pipeline::Pipeline(const Shader& vertexShader, const Shader& fragmentShader)
-		: m_VertexShader(vertexShader), m_FragmentShader(fragmentShader)
+	Pipeline::Pipeline(Shader vertexShader, Shader fragmentShader)
+		: m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader))
 	{
 		m_Pipeline = VK_NULL_HANDLE;
 		m_PipelineLayout = VK_NULL_HANDLE;

@@ -19,10 +19,11 @@ namespace Vulpine::Vulkan
 
 		VkBuffer GetBuffer() const { return m_Buffer; }
 		VkDeviceMemory GetBufferMemory() const { return m_BufferMemory; }
+
 	private:
 		static uint32_t FindMemoryTypeIndex(uint32_t supportedTypesBitmask, VkMemoryPropertyFlags requiredTypes);
 
-	public:
+	private:
 		VkDeviceSize m_BufferSize;
 
 		VkBuffer m_Buffer;
