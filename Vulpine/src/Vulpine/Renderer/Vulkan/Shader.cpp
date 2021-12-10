@@ -51,8 +51,7 @@ namespace Vulpine::Vulkan
 
 		VP_ASSERT(filePath.empty(), "Shader file path can't be an empty string!");
 
-		std::vector<char> shaderCode;
-		FileUtil::ReadFile(filePath, shaderCode);
+		std::vector<char> shaderCode = FileUtil::ReadFile(filePath);
 
 		VkShaderModuleCreateInfo shaderCreateInfo{};
 		shaderCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
