@@ -31,12 +31,12 @@ namespace Vulpine
 		glfwTerminate();
 	}
 
-	void Window::CreateSurface(const VkInstance& instance)
+	void Window::CreateSurface(VkInstance instance)
 	{
 		glfwCreateWindowSurface(instance, s_Window, nullptr, &s_Surface);
 	}
 
-	void Window::DestroySurface(const VkInstance& instance)
+	void Window::DestroySurface(VkInstance instance)
 	{
 		vkDestroySurfaceKHR(instance, s_Surface, nullptr);
 	}

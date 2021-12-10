@@ -41,8 +41,8 @@ namespace Vulpine::Vulkan
 	class DataTypeHelper
 	{
 	public:
-		static uint32_t QueryDataTypeSize(const DataType& dataType);
-		static VkFormat QueryDataTypeFormat(const DataType& dataType);
+		static uint32_t QueryDataTypeSize(DataType dataType);
+		static VkFormat QueryDataTypeFormat(DataType dataType);
 	};
 }
 

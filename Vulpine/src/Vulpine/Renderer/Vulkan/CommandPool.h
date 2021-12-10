@@ -10,8 +10,8 @@ namespace Vulpine::Vulkan
 		CommandPool(VkQueue queue, uint32_t queueIndex, VkCommandPoolCreateFlags flags = 0);
 		~CommandPool();
 
-		const VkCommandPool& GetPool() const { return m_CommandPool; }
-		const VkQueue GetQueue() const { return m_Queue; }
+		VkCommandPool GetPool() const { return m_CommandPool; }
+		VkQueue GetQueue() const { return m_Queue; }
 
 	private:
 		VkCommandPool m_CommandPool;

@@ -30,12 +30,12 @@ namespace Vulpine::Vulkan
 
 		static const PhysicalDeviceInfo& GetPhysicalDeviceInfo() { return s_PhysicalDeviceInfo; }
 
-		static const VkDevice& GetLogicalDevice() { return s_LogicalDevice; }
-		static const VkPhysicalDevice& GetPhysicalDevice() { return s_PhysicalDevice; }
+		static VkDevice GetLogicalDevice() { return s_LogicalDevice; }
+		static VkPhysicalDevice GetPhysicalDevice() { return s_PhysicalDevice; }
 
-		static const VkQueue& GetGraphicsQueue() { return s_GraphicsQueue; }
-		static const VkQueue& GetPresentQueue() { return s_PresentQueue; }
-		static const VkQueue& GetTransferQueue() { return s_TransferQueue; }
+		static VkQueue GetGraphicsQueue() { return s_GraphicsQueue; }
+		static VkQueue GetPresentQueue() { return s_PresentQueue; }
+		static VkQueue GetTransferQueue() { return s_TransferQueue; }
 	private:
 		static PhysicalDeviceInfo ChoseOptimalPhysicalDevice(const VkInstance& instance);
 		static PhysicalDeviceInfo QueryPhysicalDeviceInfo(const VkPhysicalDevice& physicalDevice);

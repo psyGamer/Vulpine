@@ -13,8 +13,8 @@ namespace Vulpine
 		static void Create(const std::string& windowTitle, uint32_t width, uint32_t height);
 		static void Destroy();
 
-		static void CreateSurface(const VkInstance& instance);
-		static void DestroySurface(const VkInstance& instance);
+		static void CreateSurface(VkInstance instance);
+		static void DestroySurface(VkInstance instance);
 
 		static VkExtent2D QueryFramebufferSize();
 

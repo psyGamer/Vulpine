@@ -10,7 +10,7 @@ namespace Vulpine::Vulkan
 		static void Create();
 		static void Destory();
 
-		static const VkInstance& GetInstance() { return s_Instance; }
+		static VkInstance GetInstance() { return s_Instance; }
 	private:
 		Instance();
 

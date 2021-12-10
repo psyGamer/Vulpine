@@ -21,8 +21,8 @@ namespace Vulpine::Vulkan
 		static const std::vector<VkImageView>& GetImageViews() { return s_ImageViews; }
 		static const std::vector<VkFramebuffer>& GetFramebuffers() { return s_Framebuffers; }
 
-		static const VkExtent2D& GetFramebufferSize() { return s_FramebufferSize; }
-		static const VkFormat& GetImageFormat() { return s_ImageFormat; }
+		static VkExtent2D GetFramebufferSize() { return s_FramebufferSize; }
+		static VkFormat GetImageFormat() { return s_ImageFormat; }
 
 	private:
 		struct SwapchainSupportInfo

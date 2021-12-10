@@ -35,8 +35,8 @@ namespace Vulpine::Vulkan
 		std::shared_ptr<const IndexBuffer> GetIndexBuffer() const { return m_pIndexBuffer; }
 		std::shared_ptr<const UniformBuffer> GetUniformBuffer() const { return m_pUniformBuffer; }
 
-		const VkPipeline& GetPipeline() const { return m_Pipeline; }
-		const VkPipelineLayout& GetPipelineLayout() const { return m_PipelineLayout; }
+		VkPipeline GetPipeline() const { return m_Pipeline; }
+		VkPipelineLayout GetPipelineLayout() const { return m_PipelineLayout; }
 
 	private:
 		VkPipeline m_Pipeline;
