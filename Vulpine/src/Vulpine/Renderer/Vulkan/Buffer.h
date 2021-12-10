@@ -23,7 +23,7 @@ namespace Vulpine::Vulkan
 	private:
 		static uint32_t FindMemoryTypeIndex(uint32_t supportedTypesBitmask, VkMemoryPropertyFlags requiredTypes);
 
-	private:
+	protected:
 		VkDeviceSize m_BufferSize;
 
 		VkBuffer m_Buffer;

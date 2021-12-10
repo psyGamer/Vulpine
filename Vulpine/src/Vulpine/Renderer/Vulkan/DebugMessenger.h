@@ -11,7 +11,7 @@ namespace Vulpine::Vulkan
 		static void Create(VkInstance instance);
 		static void Destroy(VkInstance instance);
 
-		inline static VkDebugUtilsMessengerCreateInfoEXT* GetDebugMessengerInfo();
+		static VkDebugUtilsMessengerCreateInfoEXT* GetDebugMessengerInfo();
 
 	private:
 		static VkDebugUtilsMessengerEXT s_DebugMessenger;

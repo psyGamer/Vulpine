@@ -34,8 +34,7 @@ namespace Vulpine::Vulkan
 		
 		// Vertex Input
 		auto bindingDescription = m_pVertexBuffer->QueryBindingDescriptions(0);
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-		m_pVertexBuffer->QueryAttributeDescriptions(0, &attributeDescriptions);
+		auto attributeDescriptions = m_pVertexBuffer->QueryAttributeDescriptions(0);
 
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
