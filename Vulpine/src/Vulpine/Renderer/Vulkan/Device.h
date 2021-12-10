@@ -19,12 +19,13 @@ namespace Vulpine::Vulkan
 
 			bool QueueIndicesFound() const
 			{
-				return GraphicsQueueIndex.has_value() && 
-					   PresentQueueIndex.has_value()  && 
-					   TransferQueueIndex.has_value();
+				return GraphicsQueueIndex.has_value() &&
+					PresentQueueIndex.has_value() &&
+					TransferQueueIndex.has_value();
 			}
 		};
 
+	public:
 		static void Create(VkInstance instance);
 		static void Destory();
 
